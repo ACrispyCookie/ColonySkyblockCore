@@ -11,7 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
-import net.colonymc.api.Main;
+import net.colonymc.colonyskyblockcore.Main;
+import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;
+
 
 public class FarmerMinionBlock extends MinionBlock {
 	
@@ -19,8 +21,8 @@ public class FarmerMinionBlock extends MinionBlock {
 		super(m, playerUuid, loc);
 	}
 	
-	public FarmerMinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, long lastProduced, int id) {
-		super(m, playerUuid, loc, items, lastProduced, id);
+	public FarmerMinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, Fuel f, long lastProduced, int id) {
+		super(m, playerUuid, loc, items, f, lastProduced, id);
 	}
 	
 	public FarmerMinionBlock() {
@@ -37,6 +39,14 @@ public class FarmerMinionBlock extends MinionBlock {
 			}
 			else {
 				as.setCustomNameVisible(false);
+				if(isAreaReady() && !isFarmingAreaReady()) {
+					as.setCustomNameVisible(true);
+					as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cPlanting crops..."));
+				}
+				else if(!isAreaReady() && !isFarmingAreaReady()){
+					as.setCustomNameVisible(true);
+					as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
+				}
 				playAnimation();
 				return true;
 			}
@@ -51,6 +61,8 @@ public class FarmerMinionBlock extends MinionBlock {
 	@Override
 	protected void playAnimation() {
 		Block b = getRandomBlock();
+		boolean wasAreaReady = isAreaReady();
+		boolean wasFarmingAreaReady = isFarmingAreaReady();
 		Location loc = this.loc.clone().add(0.5, 1, 0.5);
 		loc.setDirection(b.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
 		as.teleport(loc);
@@ -59,19 +71,19 @@ public class FarmerMinionBlock extends MinionBlock {
 			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
-				if(isAreaReady() && isFarmingAreaReady()) {
-					if(i == 30) {
+				if(wasAreaReady && wasFarmingAreaReady) {
+					if(i == 0.75 * animationLengthT) {
 						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 						as.setHeadPose(new EulerAngle(0, 0, 0));
 						b.setType(Material.AIR);
 					}
-					else if(i == 40) {
+					else if(i == animationLengthT) {
 						b.setType(getMinion().getFarmingFor());
 						b.setData((byte) 7);
 						as.teleport(getLocation().add(0.5, 1, 0.5));
 						cancel();
 					}
-					else if(i < 21) {
+					else if(i < 0.5 * animationLengthT) {
 						as.setCustomNameVisible(false);
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
@@ -85,8 +97,8 @@ public class FarmerMinionBlock extends MinionBlock {
 						}
 					}
 				}
-				else if(isAreaReady()) {
-					if(i < 21) {
+				else if(wasAreaReady) {
+					if(i < 0.5 * animationLengthT) {
 						as.setCustomNameVisible(true);
 						as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cPlanting crops..."));
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
@@ -100,7 +112,7 @@ public class FarmerMinionBlock extends MinionBlock {
 							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
 						}
 					}
-					else if(i == 30) {
+					else if(i == 0.75 * animationLengthT) {
 						as.setHeadPose(new EulerAngle(0, 0, 0));
 						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 						b.setType(getMinion().getFarmingFor());
@@ -110,7 +122,7 @@ public class FarmerMinionBlock extends MinionBlock {
 					}
 				}
 				else {
-					if(i < 21) {
+					if(i < 0.5 * animationLengthT) {
 						as.setCustomNameVisible(true);
 						as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
@@ -124,7 +136,7 @@ public class FarmerMinionBlock extends MinionBlock {
 							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
 						}
 					}
-					else if(i == 30) {
+					else if(i == 0.75 * animationLengthT) {
 						as.setHeadPose(new EulerAngle(0, 0, 0));
 						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 						b.setType(getMinion().getBlocksNeeded());
@@ -134,7 +146,7 @@ public class FarmerMinionBlock extends MinionBlock {
 				}
 				i++;
 			}
-		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 1);
+		}.runTaskTimer(Main.getInstance(), 0, 1);
 	}
 	
 	@Override

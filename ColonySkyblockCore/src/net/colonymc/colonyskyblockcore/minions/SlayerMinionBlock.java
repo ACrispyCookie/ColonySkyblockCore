@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
 import net.colonymc.colonyskyblockcore.Main;
+import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;
 
 public class SlayerMinionBlock extends MinionBlock {
 	
@@ -21,8 +22,8 @@ public class SlayerMinionBlock extends MinionBlock {
 		super(m, playerUuid, loc);
 	}
 	
-	public SlayerMinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, long lastProduced, int id) {
-		super(m, playerUuid, loc, items, lastProduced, id);
+	public SlayerMinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, Fuel f, long lastProduced, int id) {
+		super(m, playerUuid, loc, items, f, lastProduced, id);
 	}
 	
 	public SlayerMinionBlock() {
@@ -72,12 +73,12 @@ public class SlayerMinionBlock extends MinionBlock {
 					int i = 0;
 					@Override
 					public void run() {
-						if(i == 30) {
+						if(i == 0.75 * animationLengthT) {
 							as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 							as.setHeadPose(new EulerAngle(0, 0, 0));
 							e.damage(e.getHealth(), as);
 						}
-						else if(i == 40) {
+						else if(i == animationLengthT) {
 							Random rand = new Random();
 							if(getCloseEntities().size() < 6) {
 								getLocation().getWorld().spawnEntity(getLocation().add(rand.nextInt(3), 1, rand.nextInt(3)), getMinion().getEntityType());
@@ -85,7 +86,7 @@ public class SlayerMinionBlock extends MinionBlock {
 							as.teleport(getLocation().add(0.5, 1, 0.5));
 							cancel();
 						}
-						else if(i < 21) {
+						else if(i < 0.5 * animationLengthT) {
 							as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 							if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
 								as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));

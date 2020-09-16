@@ -25,10 +25,10 @@ public class FuelChecker {
 			Fuel item;
 			if(NBTItems.hasTag(i, "fuelDurationLeft")) {
 				int durationLeft = ((NBTTagInt) NBTItems.getTag(i, "fuelDurationLeft")).d();
-				item = (Fuel) con.newInstance(null, i, durationLeft);
+				item = (Fuel) con.newInstance(i, durationLeft);
 			}
 			else {
-				item = (Fuel) con.newInstance(null, i, -1);
+				item = (Fuel) con.newInstance(i, -1);
 			}
 			return item;
 		} catch (ClassNotFoundException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

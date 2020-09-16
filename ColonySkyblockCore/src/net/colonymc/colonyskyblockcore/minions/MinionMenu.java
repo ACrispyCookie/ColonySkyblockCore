@@ -69,6 +69,7 @@ public class MinionMenu implements Listener, InventoryHolder {
 					.name(b.getFuel().getName())
 					.lore("\n&fBoost percentage: &d" + b.getFuel().getPercentage() + "%\n&fDuration left: &d" + getDurationString(b.getFuel().getTimeLeft() * 1000) + "\n \n" + 
 					"&dClick to get the fuel back!")
+					.glint(true)
 					.build();
 			item.setAmount(b.getFuel().getItem().getAmount());
 			inv.setItem(25, item);
@@ -153,7 +154,7 @@ public class MinionMenu implements Listener, InventoryHolder {
 						}
 						menu.p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou removed the fuel from your " + menu.b.getMinion().getName() + "&f!"));
 						menu.p.playSound(menu.p.getLocation(), Sound.VILLAGER_HIT, 2, 2);
-						menu.b.getFuel().setBlock(null);
+						menu.b.setFuel(null, true);
 					}
 				}
 			}
@@ -161,7 +162,7 @@ public class MinionMenu implements Listener, InventoryHolder {
 				if(FuelChecker.isFuel(e.getCurrentItem())) {
 					if(menu.b.getFuel() == null) {
 						Fuel f = FuelChecker.getFuel(e.getCurrentItem());
-						f.setBlock(menu.b);
+						menu.b.setFuel(f, true);
 						e.setCurrentItem(null);
 						menu.p.playSound(menu.p.getLocation(), Sound.ORB_PICKUP, 2, 2);
 						menu.p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou have added &d" + f.getItem().getAmount() + "x " + f.getName() + " &fto your " + menu.b.getMinion().getName() + "&f!"));

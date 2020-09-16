@@ -29,12 +29,12 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.api.Main;
 import net.colonymc.api.itemstacks.Serializer;
 import net.colonymc.api.itemstacks.SkullItemBuilder;
 import net.colonymc.api.player.PlayerInventory;
 import net.colonymc.api.primitive.RomanNumber;
 import net.colonymc.colonyskyblockcore.Database;
+import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;
 
 public abstract class MinionBlock implements Listener {
@@ -44,12 +44,14 @@ public abstract class MinionBlock implements Listener {
 	int id;
 	int locX;
 	int locZ;
-	int finalDuration;
+	int finalDurationT;
+	int animationLengthT;
 	long lastProduced;
 	boolean isLoaded;
 	String playerUuid;
 	Location loc;
 	BukkitTask task;
+	BukkitTask fuelExpire;
 	ArmorStand as;
 	HashMap<ItemStack, Integer> items = new HashMap<ItemStack, Integer>();
 	ArrayList<Block> validBlocks = new ArrayList<Block>();
@@ -66,11 +68,13 @@ public abstract class MinionBlock implements Listener {
 		this.loc = loc;
 		this.locX = loc.getBlockX();
 		this.locZ = loc.getBlockZ();
-		this.finalDuration = m.getDuration() * 20;
+		this.finalDurationT = m.getDuration() * 20;
+		this.animationLengthT = (int) (0.8 * finalDurationT);
 		activeMinions.add(this);
+		place();
 	}
 	
-	public MinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, long lastProduce, int id) {
+	public MinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, Fuel f, long lastProduce, int id) {
 		this.m = m;
 		this.playerUuid = playerUuid;
 		this.loc = loc;
@@ -78,16 +82,13 @@ public abstract class MinionBlock implements Listener {
 		this.locZ = loc.getBlockZ();
 		this.lastProduced = lastProduce;
 		this.items = items;
-		this.finalDuration = m.getDuration() * 20;
+		setFuel(f, false);
 		this.id = id;
 		this.isLoaded = loc.getWorld().isChunkLoaded(locX/16, locZ/16);
+		activeMinions.add(this);
 		if(this.isLoaded) {
 			load();
 		}
-		else {
-			
-		}
-		activeMinions.add(this);
 	}
 	
 	public MinionBlock() {
@@ -160,11 +161,16 @@ public abstract class MinionBlock implements Listener {
 			int lastDuration = -1;
 			@Override
 			public void run() {
+				System.out.println("run");
 				if(lastDuration == -1) {
-					lastDuration = finalDuration;
+					lastDuration = finalDurationT;
 				}
 				else {
-					if(lastDuration != finalDuration) {
+					if(lastDuration != finalDurationT) {
+						checkValidBlocks();
+						if(doTask()) {
+							addItems(1);
+						}
 						restartTask();
 					}
 					else {
@@ -175,7 +181,7 @@ public abstract class MinionBlock implements Listener {
 					}
 				}
 			}
-		}.runTaskTimerAsynchronously(Main.getInstance(), finalDuration, finalDuration);
+		}.runTaskTimer(Main.getInstance(), finalDurationT, finalDurationT);
 	}
 	
 	public void stopTask() {
@@ -186,6 +192,34 @@ public abstract class MinionBlock implements Listener {
 		if(isLoaded) {
 			stopTask();
 			startTask();
+		}
+	}
+	
+	public void startExpireFuelTask() {
+		fuelExpire = new BukkitRunnable() {
+			@Override
+			public void run() {
+				if(f.getTimeLeft() == 0) {
+					expireFuel();
+				}
+				else {
+					f.setTimeLeft(f.getTimeLeft() - 1);
+				}
+			}
+		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 20);
+	}
+	
+	public void stopExpireFuelTask() {
+		fuelExpire.cancel();
+	}
+	
+	protected void expireFuel() {
+		f.decreaseItem();
+		if(f.getItem().getAmount() == 0) {
+			setFuel(null, true);
+		}
+		else {
+			Database.sendStatement("UPDATE MinionFuels SET amount=" + f.getItem().getAmount() + ",shouldNextEnd=" + (System.currentTimeMillis() + f.getDuration() * 1000) + " WHERE id=" + getId() + ";");
 		}
 	}
 	
@@ -272,9 +306,11 @@ public abstract class MinionBlock implements Listener {
 	}
 	
 	protected void calculateItems() {
-		long diff = System.currentTimeMillis() - lastProduced;
-		int times = (int) ((diff/1000)/(finalDuration/20));
-		addItems(times);
+		if(lastProduced != 0) {
+			long diff = System.currentTimeMillis() - lastProduced;
+			int times = (int) ((diff/1000)/(finalDurationT/20));
+			addItems(times);
+		}
 	}
 	
 	protected HashMap<ItemStack, Integer> getRandomLoot(int times) {
@@ -343,16 +379,27 @@ public abstract class MinionBlock implements Listener {
 		}
 	}
 	
-	public void setFuel(Fuel f) {
+	public void setFuel(Fuel f, boolean writeToDatabase) {
 		this.f = f;
 		if(this.f != null) {
+			startExpireFuelTask();
 			double percentage = (double) f.getPercentage()/100;
 			int durationInTicks = m.getDuration() * 20;
-			finalDuration = durationInTicks - (int) (percentage * durationInTicks);
+			finalDurationT = durationInTicks - (int) (percentage * durationInTicks);
+			if(writeToDatabase) {
+				Database.sendStatement("INSERT INTO MinionFuels (id, fuelType, amount, shouldNextEnd) VALUES (" + getId() + ", '" + f.getType().name() + "', " + f.getItem().getAmount() + ", " + (System.currentTimeMillis() + f.getDuration() * 1000) + ")");
+			}
 		}
 		else {
-			finalDuration = m.getDuration() * 20;
+			if(fuelExpire != null) {
+				stopExpireFuelTask();
+			}
+			finalDurationT = m.getDuration() * 20;
+			if(writeToDatabase) {
+				Database.sendStatement("DELETE FROM MinionFuels WHERE id=" + getId() + ";");
+			}
 		}
+		animationLengthT = (int) (0.8 * finalDurationT);
 	}
 	
 	public Minion getMinion() {

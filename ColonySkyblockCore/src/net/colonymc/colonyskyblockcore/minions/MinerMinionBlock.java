@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
 import net.colonymc.colonyskyblockcore.Main;
+import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.PacketPlayOutBlockBreakAnimation;
 
@@ -24,8 +25,8 @@ public class MinerMinionBlock extends MinionBlock {
 		super(m, playerUuid, loc);
 	}
 	
-	public MinerMinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, long lastProduced, int id) {
-		super(m, playerUuid, loc, items, lastProduced, id);
+	public MinerMinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, Fuel f, long lastProduced, int id) {
+		super(m, playerUuid, loc, items, f, lastProduced, id);
 	}
 	
 	public MinerMinionBlock() {
@@ -41,6 +42,10 @@ public class MinerMinionBlock extends MinionBlock {
 			}
 			else {
 				as.setCustomNameVisible(false);
+				if(!isAreaReady()) {
+					as.setCustomNameVisible(true);
+					as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
+				}
 				playAnimation();
 				return true;
 			}
@@ -96,12 +101,16 @@ public class MinerMinionBlock extends MinionBlock {
 	@Override
 	protected void playAnimation() {
 		Block b = getRandomBlock();
+		boolean wasAreaReady = isAreaReady();
+		Location loc = this.loc.clone().add(0.5, 1, 0.5);
+		loc.setDirection(b.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
+		as.teleport(loc);
 		new BukkitRunnable() {
 			int i = 0;
 			@Override
 			public void run() {
-				if(isAreaReady()) {
-					if(i == 70) {
+				if(wasAreaReady) {
+					if(i == 0.87 * animationLengthT) {
 						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 						as.setHeadPose(new EulerAngle(0, 0, 0));
 						PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(as.getEntityId(), new BlockPosition(b.getX(), b.getY(), b.getZ()), -1);
@@ -113,13 +122,12 @@ public class MinerMinionBlock extends MinionBlock {
 						}
 						b.setType(Material.AIR);
 					}
-					else if(i == 80) {
+					else if(i == animationLengthT) {
 						b.setType(getMinion().getBlocksNeeded());
 						as.teleport(getLocation().add(0.5, 1, 0.5));
-						//stop
 						cancel();
 					}
-					else if(i < 70) {
+					else if(i < 0.87 * animationLengthT) {
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
 							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
@@ -140,7 +148,7 @@ public class MinerMinionBlock extends MinionBlock {
 					}
 				}
 				else {
-					if(i < 21) {
+					if(i < 0.25 * animationLengthT) {
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
 							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
@@ -152,7 +160,7 @@ public class MinerMinionBlock extends MinionBlock {
 							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
 						}
 					}
-					else if(i == 30) {
+					else if(i == 0.38 * animationLengthT) {
 						as.setHeadPose(new EulerAngle(0, 0, 0));
 						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 						b.setType(getMinion().getBlocksNeeded());

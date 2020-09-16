@@ -49,7 +49,7 @@ public class FuelCommand implements CommandExecutor, TabExecutor {
 					if(sender instanceof Player) {
 						Player target = (Player) sender;
 						FuelType type = FuelChecker.typeFromEncodedName(args[0]);
-						Fuel item = Fuel.createNewFromType(type, null);
+						Fuel item = Fuel.createNewFromType(type);
 						PlayerInventory.addItem(item.getItem(), target, 1);
 						target.sendMessage(received + "1x " + item.getName());
 					}
@@ -74,7 +74,7 @@ public class FuelCommand implements CommandExecutor, TabExecutor {
 					if(Bukkit.getPlayer(args[1]) != null) {
 						Player target = Bukkit.getPlayer(args[1]);
 						FuelType type = FuelChecker.typeFromEncodedName(args[0]);
-						Fuel item = Fuel.createNewFromType(type, null);
+						Fuel item = Fuel.createNewFromType(type);
 						PlayerInventory.addItem(item.getItem(), target, 1);
 						target.sendMessage(received + "1x " + item.getName());
 						sender.sendMessage(youGave + "1x " + item.getName() + ChatColor.translateAlternateColorCodes('&', " &fto &d" + target.getName()));
@@ -101,7 +101,7 @@ public class FuelCommand implements CommandExecutor, TabExecutor {
 						if(Numbers.isInt(args[2]) && Integer.parseInt(args[2]) > 0) {
 							Player target = Bukkit.getPlayer(args[1]);
 							FuelType type = FuelChecker.typeFromEncodedName(args[0]);
-							Fuel item = Fuel.createNewFromType(type, null);
+							Fuel item = Fuel.createNewFromType(type);
 							PlayerInventory.addItem(item.getItem(), target, Integer.parseInt(args[2]));
 							target.sendMessage(received + args[2] + "x " + item.getName());
 							sender.sendMessage(youGave + args[2] + "x " + item.getName() + ChatColor.translateAlternateColorCodes('&', " &fto &d" + target.getName()));

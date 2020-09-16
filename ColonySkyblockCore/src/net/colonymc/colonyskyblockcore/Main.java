@@ -391,27 +391,26 @@ public class Main extends JavaPlugin{
 						items.put(i, amount);
 					}
 				}
-				MinionBlock b;
-				if(m.getType() == MinionType.MINER) {
-					b = new MinerMinionBlock(m, rs.getString("playerUuid"), new Location(Bukkit.getWorld(worldName), x, y, z), items, rs.getLong("lastProduced"), id);
-				}
-				else if(m.getType() == MinionType.FARMER) {
-					b = new FarmerMinionBlock(m, rs.getString("playerUuid"), new Location(Bukkit.getWorld(worldName), x, y, z), items, rs.getLong("lastProduced"), id);
-				}
-				else {
-					b = new SlayerMinionBlock(m, rs.getString("playerUuid"), new Location(Bukkit.getWorld(worldName), x, y, z), items, rs.getLong("lastProduced"), id);
-				}
 				ResultSet fuel = Database.getResultSet("SELECT * FROM MinionFuels WHERE id=" + id);
 				Fuel f = null;
 				if(fuel.next()) {
 					int amount = fuel.getInt("amount");
 					FuelType fuelType = FuelType.valueOf(fuel.getString("fuelType"));
-					int timeLeft = (int) ((fuel.getLong("shouldNextEnd") - System.currentTimeMillis())/50);
+					int timeLeft = (int) ((fuel.getLong("shouldNextEnd") - System.currentTimeMillis())/1000);
 					if(timeLeft > 0) {
-						f = Fuel.createNewFromType(fuelType, b);
+						f = Fuel.createNewFromType(fuelType);
 						f.getItem().setAmount(amount);
 						f.setTimeLeft(timeLeft);
 					}
+				}
+				if(m.getType() == MinionType.MINER) {
+					new MinerMinionBlock(m, rs.getString("playerUuid"), new Location(Bukkit.getWorld(worldName), x, y, z), items, f, rs.getLong("lastProduced"), id);
+				}
+				else if(m.getType() == MinionType.FARMER) {
+					new FarmerMinionBlock(m, rs.getString("playerUuid"), new Location(Bukkit.getWorld(worldName), x, y, z), items, f, rs.getLong("lastProduced"), id);
+				}
+				else {
+					new SlayerMinionBlock(m, rs.getString("playerUuid"), new Location(Bukkit.getWorld(worldName), x, y, z), items, f, rs.getLong("lastProduced"), id);
 				}
 			}
 		} catch (SQLException e) {

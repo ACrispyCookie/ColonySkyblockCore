@@ -7,14 +7,10 @@ import java.util.ArrayList;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.api.Main;
 import net.colonymc.api.itemstacks.ItemStackBuilder;
 import net.colonymc.api.itemstacks.NBTItems;
-import net.colonymc.colonyskyblockcore.Database;
-import net.colonymc.colonyskyblockcore.minions.MinionBlock;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
@@ -25,12 +21,11 @@ public abstract class Fuel {
 	int timeLeft;
 	ItemStack i;
 	String name;
-	MinionBlock block;
 	FuelType t;
 	BukkitTask expire;
 	protected abstract ItemStack createItem();
 	
-	public Fuel(int percentage, int duration, FuelType t, MinionBlock b, ItemStack i, int durationLeft) {
+	public Fuel(int percentage, int duration, FuelType t, ItemStack i, int durationLeft) {
 		this.percentage = percentage;
 		this.duration = duration;
 		this.t = t;
@@ -42,59 +37,15 @@ public abstract class Fuel {
 			this.name = i.getItemMeta().getDisplayName();
 		}
 		if(durationLeft != -1) {
-			timeLeft = durationLeft * 20;
+			timeLeft = durationLeft;
 		}
 		else {
-			timeLeft = duration * 20;
-		}
-		this.block = b;
-		if(block != null) {
-			b.setFuel(this);
-			expire = new BukkitRunnable() {
-				@Override
-				public void run() {
-					if(timeLeft == 0) {
-						expire();
-					}
-					timeLeft--;
-				}
-			}.runTaskTimer(Main.getInstance(), 0, 1);
+			timeLeft = duration;
 		}
 	}
 	
-	public void expire() {
+	public void decreaseItem() {
 		i.setAmount(i.getAmount() - 1);
-		if(i.getAmount() == 0) {
-			block.setFuel(null);
-			expire.cancel();
-		}
-		else {
-			timeLeft = duration * 20;
-			Database.sendStatement("UPDATE MinionFuels SET amount=" + i.getAmount() + ",shouldNextEnd=" + (System.currentTimeMillis() + duration * 1000) + " WHERE id=" + block.getId() + ";");
-		}
-	}
-	
-	public void setBlock(MinionBlock b) {
-		if(b != null) {
-			block = b;
-			block.setFuel(this);
-			expire = new BukkitRunnable() {
-				@Override
-				public void run() {
-					timeLeft--;
-					if(timeLeft == 0) {
-						expire();
-					}
-				}
-			}.runTaskTimer(Main.getInstance(), 0, 1);
-			Database.sendStatement("INSERT INTO MinionFuels (id, fuelType, amount, shouldNextEnd) VALUES (" + block.getId() + ", '" + t.name() + "', " + i.getAmount() + ", " + (System.currentTimeMillis() + duration * 1000) + ")");
-		}
-		else {
-			block.setFuel(null);
-			expire.cancel();
-			Database.sendStatement("DELETE FROM MinionFuels WHERE id=" + block.getId() + ";");
-			
-		}
 	}
 	
 	public void setTimeLeft(int amount) {
@@ -136,11 +87,7 @@ public abstract class Fuel {
 	}
 	
 	public int getTimeLeft() {
-		return timeLeft/20;
-	}
-	
-	public MinionBlock getBlock() {
-		return block;
+		return timeLeft;
 	}
 	
 	public ItemStack getNormalItemStack(String name, String description) {
@@ -154,11 +101,11 @@ public abstract class Fuel {
 		return item;
 	}
 	
-	public static Fuel createNewFromType(FuelType type, MinionBlock b) {
+	public static Fuel createNewFromType(FuelType type) {
 		try {
 			Class<?> cl = Class.forName("net.colonymc.colonyskyblockcore.minions.fuel.types." + type.className);
 			Constructor<?> con = cl.getDeclaredConstructors()[0];
-			Fuel item = (Fuel) con.newInstance(b, null, -1);
+			Fuel item = (Fuel) con.newInstance(null, -1);
 			return item;
 		} catch (ClassNotFoundException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
