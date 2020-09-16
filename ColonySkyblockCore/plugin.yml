@@ -1,0 +1,56 @@
+name: ColonySkyblockCore
+version: 1.0
+author: ACrispyCookie
+main: net.colonymc.colonyskyblockcore.Main
+depend: [WorldGuard, Citizens, PlaceholderAPI, ColonySpigotAPI, ProtocolLib, NBTAPI]
+commands:
+  shop:
+    description: Base command for the shop.
+  pouch:
+    description: Base commnand for pouches.
+    aliases: [pouches]
+  pet:
+    description: Base commnand for pets.
+    aliases: [pets]
+  fuel:
+    description: Base commnand for minion fuels.
+  minion:
+    description: Base commnand for minions.
+  spawner:
+    description: Base command for spawners.
+  trade:
+    description: Base command for player trading.
+  guild:
+    description: Base command for the guild system.
+    aliases: [g, island, is]
+  balance:
+    description: Base command for the basic currency.
+    aliases: [bal]
+  createkit:
+    description: Base command for creating new kits.
+  deletekit:
+    description: Base command for deleting kits.
+  kit: 
+    description: Base command for the kit system.
+    aliases: [kits]
+  adminguild:
+    description: Base command for the guild system.
+    aliases: [ag, adming, aguild]
+  dwarfdust:
+    description: Admin command to change the amount of dwarf dust of a player.
+  dust:
+    description: Command to see your grams of dwarf dust.
+  tp:
+    description: Command to teleport to other players
+    aliases: [teleport, tpa]
+  spawn:
+    description: Command to teleport to the spawn.
+  message:
+    description: Command to send private messages to any player.
+    aliases: [msg, t, whisper, w, m]
+  reply:
+    description: Command to reply to an existing conversation between to playes.
+    aliases: [r]
+  plugins:
+    description: Command for custom plugins.
+    aliases: [pl, plugin]

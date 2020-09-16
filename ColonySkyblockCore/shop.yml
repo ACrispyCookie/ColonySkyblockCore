@@ -1,0 +1,9 @@
+categories:
+  blocks:
+    material: "STONE"
+    name: "&a&lBLOCKS"
+    lore: "\n&fAll kinds of blocks can\nbe found in this shop category"
+
+shop:
+  blocks:
+    - "DIRT;10;10;32"

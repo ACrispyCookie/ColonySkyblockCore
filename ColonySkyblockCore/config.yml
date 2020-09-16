@@ -1,0 +1,11 @@
+mysql:
+  host: hostname
+  port: 3306
+  database: database
+  username: username
+  password: password 
+crateLocation:
+  world: world
+  x: 27
+  y: 63
+  z: -14

@@ -1,0 +1,15 @@
+kits: 
+  test:
+    display_item: WOOD_HOE
+    permission: prince.store
+    cooldown: 60
+    items: 
+    - ==: org.bukkit.inventory.ItemStack
+      type: POTATO_ITEM
+      amount: 62
+    commands:
+    - "bal give %player% 100"
+    command_displays:
+    - ==: org.bukkit.inventory.ItemStack
+      type: COOKIE
+      amount: 64

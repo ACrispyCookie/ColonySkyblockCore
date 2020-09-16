@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/spigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/worldguard-6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/Citizens (2).jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/PlaceholderAPI-2.10.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/FastAsyncWorldEdit-bukkit-17.12.26-994856b-952-18.0.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/worldedit-bukkit-6.1.7.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/ProtocolLib-4.2.1-20170309.155517-9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/ColonySpigotAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/ColonyVikingCore.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jason/Desktop/coding/build tools/random jars/item-nbt-api-plugin-2.5.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
