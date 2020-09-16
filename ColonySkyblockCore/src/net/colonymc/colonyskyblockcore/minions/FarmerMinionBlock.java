@@ -8,6 +8,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
+
+import net.colonymc.api.Main;
 
 public class FarmerMinionBlock extends MinionBlock {
 	
@@ -24,7 +28,7 @@ public class FarmerMinionBlock extends MinionBlock {
 	}
 	
 	@Override
-	protected void harvest() {
+	protected boolean doTask() {
 		if(isInRightArea()) {
 			checkValidBlocks();
 			if(isFull()) {
@@ -34,35 +38,103 @@ public class FarmerMinionBlock extends MinionBlock {
 			else {
 				as.setCustomNameVisible(false);
 				playAnimation();
+				return true;
 			}
 		}
 		else {
 			as.setCustomNameVisible(true);
 			as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cThe place is not perfect for harvesting!"));
 		}
+		return false;
 	}
 	
 	@Override
 	protected void playAnimation() {
-		isHarvesting = true;
 		Block b = getRandomBlock();
 		Location loc = this.loc.clone().add(0.5, 1, 0.5);
 		loc.setDirection(b.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
 		as.teleport(loc);
-		if(isFarmingAreaReady()) {
-			as.setCustomNameVisible(false);
-			Animations.farmingAnimation(this, b, true, true);
-		}
-		else if(isAreaReady()) {
-			as.setCustomNameVisible(true);
-			as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cPlanting crops..."));
-			Animations.farmingAnimation(this, b, true, false);
-		}
-		else {
-			as.setCustomNameVisible(true);
-			as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
-			Animations.farmingAnimation(this, b, false, false);
-		}
+		new BukkitRunnable() {
+			int i = 0;
+			@SuppressWarnings("deprecation")
+			@Override
+			public void run() {
+				if(isAreaReady() && isFarmingAreaReady()) {
+					if(i == 30) {
+						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
+						as.setHeadPose(new EulerAngle(0, 0, 0));
+						b.setType(Material.AIR);
+					}
+					else if(i == 40) {
+						b.setType(getMinion().getFarmingFor());
+						b.setData((byte) 7);
+						as.teleport(getLocation().add(0.5, 1, 0.5));
+						cancel();
+					}
+					else if(i < 21) {
+						as.setCustomNameVisible(false);
+						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
+						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else if(as.getRightArmPose().getX() >= Math.toRadians(-15)) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+					}
+				}
+				else if(isAreaReady()) {
+					if(i < 21) {
+						as.setCustomNameVisible(true);
+						as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cPlanting crops..."));
+						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
+						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else if(as.getRightArmPose().getX() >= Math.toRadians(-15)) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+					}
+					else if(i == 30) {
+						as.setHeadPose(new EulerAngle(0, 0, 0));
+						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
+						b.setType(getMinion().getFarmingFor());
+						b.setData((byte) 7); 
+						as.teleport(getLocation().add(0.5, 1, 0.5));
+						cancel();
+					}
+				}
+				else {
+					if(i < 21) {
+						as.setCustomNameVisible(true);
+						as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
+						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
+						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else if(as.getRightArmPose().getX() >= Math.toRadians(-15)) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+					}
+					else if(i == 30) {
+						as.setHeadPose(new EulerAngle(0, 0, 0));
+						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
+						b.setType(getMinion().getBlocksNeeded());
+						as.teleport(getLocation().add(0.5, 1, 0.5));
+						cancel();
+					}
+				}
+				i++;
+			}
+		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 1);
 	}
 	
 	@Override

@@ -7,7 +7,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
+
+import net.colonymc.colonyskyblockcore.Main;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.PacketPlayOutBlockBreakAnimation;
 
 public class MinerMinionBlock extends MinionBlock {
 
@@ -24,9 +33,8 @@ public class MinerMinionBlock extends MinionBlock {
 	}
 	
 	@Override
-	protected void harvest() {
+	protected boolean doTask() {
 		if(isInRightArea()) {
-			checkValidBlocks();
 			if(isFull()) {
 				as.setCustomNameVisible(true);
 				as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cMinion's inventory is full!"));
@@ -34,30 +42,14 @@ public class MinerMinionBlock extends MinionBlock {
 			else {
 				as.setCustomNameVisible(false);
 				playAnimation();
+				return true;
 			}
 		}
 		else {
 			as.setCustomNameVisible(true);
 			as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cThe place is not perfect for harvesting!"));
 		}
-	}
-	
-	@Override
-	protected void playAnimation() {
-		isHarvesting = true;
-		Block b = getRandomBlock();
-		Location loc = this.loc.clone().add(0.5, 1, 0.5);
-		loc.setDirection(b.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
-		as.teleport(loc);
-		if(isAreaReady()) {
-			as.setCustomNameVisible(false);
-			Animations.miningAnimation(this, b, true);
-		}
-		else {
-			as.setCustomNameVisible(true);
-			as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
-			Animations.miningAnimation(this, b, false);
-		}
+		return false;
 	}
 	
 	@Override
@@ -99,6 +91,78 @@ public class MinerMinionBlock extends MinionBlock {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	protected void playAnimation() {
+		Block b = getRandomBlock();
+		new BukkitRunnable() {
+			int i = 0;
+			@Override
+			public void run() {
+				if(isAreaReady()) {
+					if(i == 70) {
+						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
+						as.setHeadPose(new EulerAngle(0, 0, 0));
+						PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(as.getEntityId(), new BlockPosition(b.getX(), b.getY(), b.getZ()), -1);
+						for(Entity e : as.getNearbyEntities(20, 50, 20)) {
+							if(e instanceof Player) {
+								Player p = (Player) e;
+								((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+							}
+						}
+						b.setType(Material.AIR);
+					}
+					else if(i == 80) {
+						b.setType(getMinion().getBlocksNeeded());
+						as.teleport(getLocation().add(0.5, 1, 0.5));
+						//stop
+						cancel();
+					}
+					else if(i < 70) {
+						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
+						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else if(as.getRightArmPose().getX() >= Math.toRadians(-15)) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(as.getEntityId(), new BlockPosition(b.getX(), b.getY(), b.getZ()), i/10);
+						for(Entity e : as.getNearbyEntities(20, 50, 20)) {
+							if(e instanceof Player) {
+								Player p = (Player) e;
+								((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+							}
+						}
+					}
+				}
+				else {
+					if(i < 21) {
+						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
+						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else if(as.getRightArmPose().getX() >= Math.toRadians(-15)) {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+						else {
+							as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+						}
+					}
+					else if(i == 30) {
+						as.setHeadPose(new EulerAngle(0, 0, 0));
+						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
+						b.setType(getMinion().getBlocksNeeded());
+						as.teleport(getLocation().add(0.5, 1, 0.5));
+						cancel();
+					}
+				}
+				i++;
+			}
+		}.runTaskTimer(Main.getInstance(), 0, 1);
 	}
 	
 	private Block getRandomBlock() {

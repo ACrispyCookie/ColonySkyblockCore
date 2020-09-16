@@ -10,6 +10,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
+
+import net.colonymc.colonyskyblockcore.Main;
 
 public class SlayerMinionBlock extends MinionBlock {
 	
@@ -26,7 +30,7 @@ public class SlayerMinionBlock extends MinionBlock {
 	}
 	
 	@Override
-	protected void harvest() {
+	protected boolean doTask() {
 		if(isInRightArea()) {
 			checkValidBlocks();
 			if(isFull()) {
@@ -36,24 +40,24 @@ public class SlayerMinionBlock extends MinionBlock {
 			else {
 				as.setCustomNameVisible(false);
 				playAnimation();
+				return true;
 			}
 		}
 		else {
 			as.setCustomNameVisible(true);
 			as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cThe place is not perfect for harvesting!"));
 		}
+		return false;
 	}
 	
 	@Override
 	protected void playAnimation() {
-		isHarvesting = true;
 		if(getCloseEntities().size() < 4) {
 			if(as.isCustomNameVisible()) {
 				as.setCustomNameVisible(false);
 			}
 			Random rand = new Random();
 			loc.getWorld().spawnEntity(loc.clone().add(rand.nextInt(3), 1, rand.nextInt(3)), m.getEntityType());
-			isHarvesting = false;
 		}
 		else {
 			if(as.isCustomNameVisible()) {
@@ -64,10 +68,38 @@ public class SlayerMinionBlock extends MinionBlock {
 				Location loc = this.loc.clone().add(0.5, 1, 0.5);
 				loc.setDirection(e.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
 				as.teleport(loc);
-				Animations.slayingAnimation(this, e);
-			}
-			else {
-				isHarvesting = false;
+				new BukkitRunnable() {
+					int i = 0;
+					@Override
+					public void run() {
+						if(i == 30) {
+							as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
+							as.setHeadPose(new EulerAngle(0, 0, 0));
+							e.damage(e.getHealth(), as);
+						}
+						else if(i == 40) {
+							Random rand = new Random();
+							if(getCloseEntities().size() < 6) {
+								getLocation().getWorld().spawnEntity(getLocation().add(rand.nextInt(3), 1, rand.nextInt(3)), getMinion().getEntityType());
+							}
+							as.teleport(getLocation().add(0.5, 1, 0.5));
+							cancel();
+						}
+						else if(i < 21) {
+							as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
+							if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
+								as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+							}
+							else if(as.getRightArmPose().getX() >= Math.toRadians(-15)) {
+								as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+							}
+							else {
+								as.setRightArmPose(new EulerAngle(Math.toRadians(Math.toDegrees(as.getRightArmPose().getX()) + 7), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
+							}
+						}
+						i++;
+					}
+				}.runTaskTimer(Main.getInstance(), 0, 1);
 			}
 		}
 	}

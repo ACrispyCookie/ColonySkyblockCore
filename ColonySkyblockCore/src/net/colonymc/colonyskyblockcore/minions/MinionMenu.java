@@ -143,7 +143,7 @@ public class MinionMenu implements Listener, InventoryHolder {
 					}
 				}
 				else if(e.getSlot() == 34) {
-					menu.b.breakBlock(menu.p);
+					menu.b.breakMinion(menu.p);
 					menu.p.closeInventory();
 				}
 				else if(e.getSlot() == 25) {

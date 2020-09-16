@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -30,12 +29,12 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import net.colonymc.api.Main;
 import net.colonymc.api.itemstacks.Serializer;
 import net.colonymc.api.itemstacks.SkullItemBuilder;
 import net.colonymc.api.player.PlayerInventory;
 import net.colonymc.api.primitive.RomanNumber;
 import net.colonymc.colonyskyblockcore.Database;
-import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;
 
 public abstract class MinionBlock implements Listener {
@@ -47,17 +46,15 @@ public abstract class MinionBlock implements Listener {
 	int locZ;
 	int finalDuration;
 	long lastProduced;
-	boolean isHarvesting;
-	boolean isChunkLoaded;
+	boolean isLoaded;
 	String playerUuid;
 	Location loc;
-	BukkitTask harvest;
-	BukkitTask harvesting;
+	BukkitTask task;
 	ArmorStand as;
 	HashMap<ItemStack, Integer> items = new HashMap<ItemStack, Integer>();
 	ArrayList<Block> validBlocks = new ArrayList<Block>();
 	public static ArrayList<MinionBlock> activeMinions = new ArrayList<MinionBlock>();
-	protected abstract void harvest();
+	protected abstract boolean doTask(); //returns if should add items
 	protected abstract void playAnimation();
 	protected abstract ItemStack getItemInHand();
 	protected abstract boolean isInRightArea();
@@ -69,11 +66,8 @@ public abstract class MinionBlock implements Listener {
 		this.loc = loc;
 		this.locX = loc.getBlockX();
 		this.locZ = loc.getBlockZ();
-		this.isChunkLoaded = true;
 		this.finalDuration = m.getDuration() * 20;
 		activeMinions.add(this);
-		place();
-		checkValidBlocks();
 	}
 	
 	public MinionBlock(Minion m, String playerUuid, Location loc, HashMap<ItemStack, Integer> items, long lastProduce, int id) {
@@ -84,15 +78,16 @@ public abstract class MinionBlock implements Listener {
 		this.locZ = loc.getBlockZ();
 		this.lastProduced = lastProduce;
 		this.items = items;
-		this.isChunkLoaded = loc.getWorld().isChunkLoaded(loc.getBlockX()/16, loc.getBlockZ()/16);
 		this.finalDuration = m.getDuration() * 20;
 		this.id = id;
-		activeMinions.add(this);
-		if(isChunkLoaded) {
-			placeAfterStartup();
-			checkValidBlocks();
-			startCountdown();
+		this.isLoaded = loc.getWorld().isChunkLoaded(locX/16, locZ/16);
+		if(this.isLoaded) {
+			load();
 		}
+		else {
+			
+		}
+		activeMinions.add(this);
 	}
 	
 	public MinionBlock() {
@@ -100,24 +95,15 @@ public abstract class MinionBlock implements Listener {
 	}
 	
 	public void place() {
-		as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5, 1, 0.5), EntityType.ARMOR_STAND);
-		as.setSmall(true);
-		as.setBasePlate(false);
-		as.setArms(true);
-		as.setCustomNameVisible(false);
-		as.setGravity(false);
-		addEquipment();
-		startCountdown();
 		id = getNewID();
 		Database.sendStatement("INSERT INTO ActiveMinions (id, playerUuid, materialType, level, x, y, z, world, lastProduced) VALUES "
 				+ "(" + id + ", '" + playerUuid + "', '" + m.getMaterial().name() + "', " + m.getLevel() + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", '" + loc.getWorld().getName() + "', 0)");
+		load();
 	}
 	
-	public void breakBlock(Player p) {
-		as.remove();
-		harvest.cancel();
-		if(isHarvesting) {
-			harvesting.cancel();
+	public void breakMinion(Player p) {
+		if(isLoaded) {
+			unload();
 		}
 		p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou have broken a &d" + m.getMaterial().className + " Minion (" + RomanNumber.toRoman(m.getLevel()) + ")&f!"));
 		loc.getWorld().dropItem(loc, m.getItemStack());
@@ -146,65 +132,61 @@ public abstract class MinionBlock implements Listener {
 		Database.sendStatement("DELETE FROM ActiveMinions WHERE id=" + id + ";");
 	}
 	
-	public void checkValidBlocks() {
-		if(isInRightArea() && isChunkLoaded) {
-			validBlocks.clear();
-			for(int z = 2; z > -3; z--) {
-				for(int x = 2; x > -3; x--) {
-					if(x == 0 && z == 0) {
-						continue;
-					}
-					validBlocks.add(loc.clone().add(x, 0, z).getBlock());
-				}
-			}
-		}
-	}
-	
-	public void placeAfterStartup() {
+	public void load() {
 		as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5, 1, 0.5), EntityType.ARMOR_STAND);
 		as.setSmall(true);
 		as.setBasePlate(false);
 		as.setArms(true);
 		as.setCustomNameVisible(false);
 		as.setGravity(false);
-		for(Entity en : as.getNearbyEntities(0.01, 0, 0.01)) {
-			if(en instanceof ArmorStand) {
-				ArmorStand eas = (ArmorStand) en;
-				if(eas.isSmall() == as.isSmall() && eas.hasBasePlate() == as.hasBasePlate() && eas.hasArms() == as.hasArms() && as.isCustomNameVisible() == eas.isCustomNameVisible() && eas.hasGravity() == as.hasGravity()) {
-					en.remove();
-				}
-			}
-		}
 		addEquipment();
 		calculateItems();
+		startTask();
+		isLoaded = true;
+		lastProduced = 0;
+		Database.sendStatement("UPDATE ActiveMinions SET lastProduced=" + lastProduced + " WHERE id=" + id + ";");
 	}
 	
-	public void breakBlockForShutdown() {
-		if(as != null) {
-			as.remove();
-		}
-		if(isHarvesting) {
-			harvesting.cancel();
-			isHarvesting = false;
-		}
-		stopCountdown();
+	public void unload() {
+		as.remove();
+		stopTask();
+		isLoaded = false;
 		lastProduced = System.currentTimeMillis();
 		Database.sendStatement("UPDATE ActiveMinions SET lastProduced=" + lastProduced + " WHERE id=" + id + ";");
 	}
 	
-	public void stopCountdown() {
-		if(isHarvesting) {
-			harvest.cancel();
-		}
-	}
-	
-	public void startCountdown() {
-		harvest = new BukkitRunnable() {
+	public void startTask() {
+		task = new BukkitRunnable() {
+			int lastDuration = -1;
 			@Override
 			public void run() {
-				harvest();
+				if(lastDuration == -1) {
+					lastDuration = finalDuration;
+				}
+				else {
+					if(lastDuration != finalDuration) {
+						restartTask();
+					}
+					else {
+						checkValidBlocks();
+						if(doTask()) {
+							addItems(1);
+						}
+					}
+				}
 			}
-		}.runTaskTimer(Main.getInstance(), finalDuration, finalDuration);
+		}.runTaskTimerAsynchronously(Main.getInstance(), finalDuration, finalDuration);
+	}
+	
+	public void stopTask() {
+		task.cancel();
+	}
+	
+	public void restartTask() {
+		if(isLoaded) {
+			stopTask();
+			startTask();
+		}
 	}
 	
 	protected void addItems(int times) {
@@ -295,17 +277,6 @@ public abstract class MinionBlock implements Listener {
 		addItems(times);
 	}
 	
-	protected void onChunkLoad() {
-		isChunkLoaded = true;
-		placeAfterStartup();
-		startCountdown();
-	}
-	
-	protected void onChunkUnload() {
-		isChunkLoaded = false;
-		breakBlockForShutdown();
-	}
-	
 	protected HashMap<ItemStack, Integer> getRandomLoot(int times) {
 		HashMap<ItemStack, Integer> items = new HashMap<ItemStack, Integer>();
 		for(int c = 0; c < times; c++) {
@@ -358,6 +329,32 @@ public abstract class MinionBlock implements Listener {
 		return 0;
 	}
 	
+	public void checkValidBlocks() {
+		if(isInRightArea()) {
+			validBlocks.clear();
+			for(int z = 2; z > -3; z--) {
+				for(int x = 2; x > -3; x--) {
+					if(x == 0 && z == 0) {
+						continue;
+					}
+					validBlocks.add(loc.clone().add(x, 0, z).getBlock());
+				}
+			}
+		}
+	}
+	
+	public void setFuel(Fuel f) {
+		this.f = f;
+		if(this.f != null) {
+			double percentage = (double) f.getPercentage()/100;
+			int durationInTicks = m.getDuration() * 20;
+			finalDuration = durationInTicks - (int) (percentage * durationInTicks);
+		}
+		else {
+			finalDuration = m.getDuration() * 20;
+		}
+	}
+	
 	public Minion getMinion() {
 		return m;
 	}
@@ -378,34 +375,6 @@ public abstract class MinionBlock implements Listener {
 		return items;
 	}
 	
-	public boolean isHarvesting() {
-		return isHarvesting;
-	}
-	
-	public void setChunkLoaded(boolean loaded) {
-		isChunkLoaded = loaded;
-	}
-	
-	public void setFuel(Fuel f) {
-		this.f = f;
-		if(this.f != null) {
-			double percentage = (double) f.getPercentage()/100;
-			int durationInTicks = m.getDuration() * 20;
-			finalDuration = durationInTicks - (int) (percentage * durationInTicks);
-			if(!isHarvesting) {
-				stopCountdown();
-				startCountdown();
-			}
-		}
-		else {
-			finalDuration = m.getDuration() * 20;
-			if(!isHarvesting) {
-				stopCountdown();
-				startCountdown();
-			}
-		}
-	}
-	
 	public boolean isFull() {
 		int amount = 0;
 		for(ItemStack i : items.keySet()) {
@@ -415,12 +384,7 @@ public abstract class MinionBlock implements Listener {
 	}
 	
 	public long getLastProduced() {
-		if(!isChunkLoaded) {
-			return lastProduced;
-		}
-		else {
-			return -1;
-		}
+		return lastProduced;
 	}
 	
 	public static MinionBlock getByArmorStand(ArmorStand as) {
@@ -444,15 +408,8 @@ public abstract class MinionBlock implements Listener {
 	public static ArrayList<MinionBlock> getByChunk(Chunk chunk) {
 		ArrayList<MinionBlock> block = new ArrayList<MinionBlock>();
 		for(MinionBlock b : activeMinions) {
-			System.out.println(chunk.getWorld());
-			System.out.println(b.loc.clone().getWorld());
-			System.out.println(chunk.getX());
-			System.out.println(b.locX/16);
-			System.out.println(chunk.getZ());
-			System.out.println(b.locZ/16);
 			if(chunk.getWorld().equals(b.loc.clone().getWorld()) && chunk.getX() == b.locX/16 && chunk.getZ() == b.locZ/16) {
 				block.add(b);
-				System.out.println("---------------------------");
 			}
 		}
 		return block;
@@ -560,13 +517,7 @@ public abstract class MinionBlock implements Listener {
 	public void onChunkLoad(ChunkLoadEvent e) {
 		if(!MinionBlock.getByChunk(e.getChunk()).isEmpty()) {
 			for(MinionBlock b : MinionBlock.getByChunk(e.getChunk())) {
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						b.onChunkLoad();
-						System.out.println("loaded b ");
-					}
-				}.runTaskLater(Main.getInstance(), 3);
+				b.load();
 			}
 		}
 	}
@@ -575,8 +526,7 @@ public abstract class MinionBlock implements Listener {
 	public void onChunkLoad(ChunkUnloadEvent e) {
 		if(!MinionBlock.getByChunk(e.getChunk()).isEmpty()) {
 			for(MinionBlock b : MinionBlock.getByChunk(e.getChunk())) {
-				b.onChunkUnload();
-				System.out.println("unloaded b ");
+				b.unload();
 			}
 		}
 	}

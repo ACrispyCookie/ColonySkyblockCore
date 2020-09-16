@@ -256,10 +256,8 @@ public class Main extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new WarLootMenu(), this);
 		Bukkit.getPluginManager().registerEvents(new MinionMenu(), this);
 		Bukkit.getPluginManager().registerEvents(new MinionBlock() {
-			@Override public void place() {} @Override public void breakBlock(Player p) {} @Override public void placeAfterStartup() {} 
-			@Override protected void harvest() {} @Override protected void playAnimation() {} @Override protected ItemStack getItemInHand() {return null;}
-			@Override protected boolean isInRightArea() {return false;}
-			@Override protected void onChunkUnload() {} @Override protected void onChunkLoad() {}
+			@Override public void place() {} @Override protected void playAnimation() {} @Override protected ItemStack getItemInHand() {return null;}
+			@Override protected boolean isInRightArea() {return false;} @Override protected boolean doTask() { return false; }
 		}, this);
 		Bukkit.getPluginManager().registerEvents(new CrateMenu(), this);
 		Bukkit.getPluginManager().registerEvents(new NPCListener(), this);
@@ -423,7 +421,7 @@ public class Main extends JavaPlugin{
 	
 	public void unloadMinions() {
 		for(MinionBlock b : MinionBlock.activeMinions) {
-			b.breakBlockForShutdown();
+			b.unload();
 		}
 	}
 	
