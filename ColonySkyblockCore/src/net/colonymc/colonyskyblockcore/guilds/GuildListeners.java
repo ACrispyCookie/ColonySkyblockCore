@@ -166,10 +166,10 @@ public class GuildListeners implements Listener {
 			TextComponent c = new TextComponent(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(p, "%vault_prefix%")));
 			c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/store"));
 			c.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[] {new TextComponent(ChatColor.translateAlternateColorCodes('&', "&fClick here to get a link to our &dstore!"))}));
-			TextComponent name = new TextComponent(p.hasPermission("anax.store") ? ChatColor.translateAlternateColorCodes('&', "&r" + p.getName()) : ChatColor.translateAlternateColorCodes('&', "&7" + p.getName()));
+			TextComponent name = new TextComponent(p.hasPermission("prince.store") ? ChatColor.translateAlternateColorCodes('&', "&r" + p.getName()) : ChatColor.translateAlternateColorCodes('&', "&7" + p.getName()));
 			name.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + p.getName() + " "));
 			name.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[] {new TextComponent(ChatColor.translateAlternateColorCodes('&', "&fRank: " + 
-					PlaceholderAPI.setPlaceholders(p, p.hasPermission("anax.store") ? "%vault_prefix%" : "&7Knight") + "\n&fGuild: &d" + Guild.getByPlayer(p).getName() + "\n&fGuild rank: " + Guild.getByPlayer(p).getGuildPlayer(p).getRole().color + Guild.getByPlayer(p).getGuildPlayer(p).getRole().name
+					PlaceholderAPI.setPlaceholders(p, p.hasPermission("prince.store") ? "%vault_prefix%" : "&7Knight") + "\n&fGuild: &d" + Guild.getByPlayer(p).getName() + "\n&fGuild rank: " + Guild.getByPlayer(p).getGuildPlayer(p).getRole().color + Guild.getByPlayer(p).getGuildPlayer(p).getRole().name
 					+ "\n&fGuild top: &d#" + Guild.getByPlayer(p).getTopPlace() + "\n&fGuild power level: &d" + Guild.getByPlayer(p).getLevel() + " level\n \n&fClick here to message &d" + p.getName()))}));
 			ArrayList<TextComponent> msg = new ArrayList<TextComponent>();
 			String[] words = e.getMessage().split(" ");
@@ -192,7 +192,7 @@ public class GuildListeners implements Listener {
 			if(guildPlace != null) {
 				finalmsg.addExtra(guildPlace);
 			}
-			finalmsg.addExtra(ChatColor.translateAlternateColorCodes('&', " &5» " + (p.hasPermission("anax.store") ? "&f" : "&7")));
+			finalmsg.addExtra(ChatColor.translateAlternateColorCodes('&', " &5» " + (p.hasPermission("prince.store") ? "&f" : "&7")));
 			for(TextComponent t : msg) {
 				finalmsg.addExtra(t);
 			}

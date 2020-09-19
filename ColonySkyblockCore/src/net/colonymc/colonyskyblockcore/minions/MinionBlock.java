@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -51,6 +52,7 @@ public abstract class MinionBlock implements Listener {
 	String playerUuid;
 	Location loc;
 	BukkitTask task;
+	BukkitTask loadArmorStand;
 	BukkitTask fuelExpire;
 	ArmorStand as;
 	HashMap<ItemStack, Integer> items = new HashMap<ItemStack, Integer>();
@@ -87,7 +89,7 @@ public abstract class MinionBlock implements Listener {
 		this.isLoaded = loc.getWorld().isChunkLoaded(locX/16, locZ/16);
 		activeMinions.add(this);
 		if(this.isLoaded) {
-			load();
+			load(false);
 		}
 	}
 	
@@ -97,15 +99,16 @@ public abstract class MinionBlock implements Listener {
 	
 	public void place() {
 		id = getNewID();
-		Database.sendStatement("INSERT INTO ActiveMinions (id, playerUuid, materialType, level, x, y, z, world, lastProduced) VALUES "
-				+ "(" + id + ", '" + playerUuid + "', '" + m.getMaterial().name() + "', " + m.getLevel() + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", '" + loc.getWorld().getName() + "', 0)");
-		load();
+		Database.sendStatement("INSERT INTO ActiveMinions (id, playerUuid, materialType, level, x, y, z, world, lastProduced, entityId) VALUES "
+				+ "(" + id + ", '" + playerUuid + "', '" + m.getMaterial().name() + "', " + m.getLevel() + ", " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ() + ", '" + loc.getWorld().getName() + "', 0, '0')");
+		load(true);
 	}
 	
 	public void breakMinion(Player p) {
 		if(isLoaded) {
 			unload();
 		}
+		as.remove();
 		p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou have broken a &d" + m.getMaterial().className + " Minion (" + RomanNumber.toRoman(m.getLevel()) + ")&f!"));
 		loc.getWorld().dropItem(loc, m.getItemStack());
 		for(ItemStack i : items.keySet()) {
@@ -133,24 +136,53 @@ public abstract class MinionBlock implements Listener {
 		Database.sendStatement("DELETE FROM ActiveMinions WHERE id=" + id + ";");
 	}
 	
-	public void load() {
-		as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5, 1, 0.5), EntityType.ARMOR_STAND);
-		as.setSmall(true);
-		as.setBasePlate(false);
-		as.setArms(true);
-		as.setCustomNameVisible(false);
-		as.setGravity(false);
-		addEquipment();
+	public void load(boolean firstTime) {
+		if(firstTime) {
+			as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5, 1, 0.5), EntityType.ARMOR_STAND);
+			as.setSmall(true);
+			as.setBasePlate(false);
+			as.setArms(true);
+			as.setCustomNameVisible(false);
+			as.setGravity(false);
+			as.setRemoveWhenFarAway(false);
+			addEquipment();
+		}
+		else {
+			try {
+				ResultSet rs = Database.getResultSet("SELECT entityId FROM ActiveMinions WHERE id=" + this.getId() + ";");
+				if(rs.next()) {
+					String uuid = rs.getString("entityId");
+					loadArmorStand = new BukkitRunnable() {
+						@Override
+						public void run() {
+							for(Entity e : loc.getChunk().getEntities()) {
+								if(e instanceof ArmorStand) {
+									if(e.getUniqueId().toString().equals(uuid)) {
+										as = (ArmorStand) e;
+										as.teleport(loc.clone().add(0.5, 1, 0.5));
+										cancel();
+									}
+								}
+							}
+						}
+					}.runTaskTimer(Main.getInstance(), 0, 1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		calculateItems();
 		startTask();
 		isLoaded = true;
 		lastProduced = 0;
-		Database.sendStatement("UPDATE ActiveMinions SET lastProduced=" + lastProduced + " WHERE id=" + id + ";");
+		Database.sendStatement("UPDATE ActiveMinions SET lastProduced=" + lastProduced + (firstTime ? ",entityId='" + as.getUniqueId().toString() + "'" : "") + " WHERE id=" + id + ";");
 	}
 	
 	public void unload() {
-		as.remove();
 		stopTask();
+		if(loadArmorStand != null) {
+			loadArmorStand.cancel();
+		}
 		isLoaded = false;
 		lastProduced = System.currentTimeMillis();
 		Database.sendStatement("UPDATE ActiveMinions SET lastProduced=" + lastProduced + " WHERE id=" + id + ";");
@@ -158,26 +190,21 @@ public abstract class MinionBlock implements Listener {
 	
 	public void startTask() {
 		task = new BukkitRunnable() {
-			int lastDuration = -1;
+			int lastDuration = finalDurationT;
 			@Override
 			public void run() {
-				System.out.println("run");
-				if(lastDuration == -1) {
+				if(lastDuration != finalDurationT) {
 					lastDuration = finalDurationT;
+					restartTask();
+					checkValidBlocks();
+					if(doTask()) {
+						addItems(1);
+					}
 				}
 				else {
-					if(lastDuration != finalDurationT) {
-						checkValidBlocks();
-						if(doTask()) {
-							addItems(1);
-						}
-						restartTask();
-					}
-					else {
-						checkValidBlocks();
-						if(doTask()) {
-							addItems(1);
-						}
+					checkValidBlocks();
+					if(doTask()) {
+						addItems(1);
 					}
 				}
 			}
@@ -564,7 +591,7 @@ public abstract class MinionBlock implements Listener {
 	public void onChunkLoad(ChunkLoadEvent e) {
 		if(!MinionBlock.getByChunk(e.getChunk()).isEmpty()) {
 			for(MinionBlock b : MinionBlock.getByChunk(e.getChunk())) {
-				b.load();
+				b.load(false);
 			}
 		}
 	}

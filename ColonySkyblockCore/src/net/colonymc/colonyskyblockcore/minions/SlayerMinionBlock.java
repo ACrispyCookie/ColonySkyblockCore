@@ -66,9 +66,6 @@ public class SlayerMinionBlock extends MinionBlock {
 			}
 			LivingEntity e = getRandomEntity();
 			if(e != null) {
-				Location loc = this.loc.clone().add(0.5, 1, 0.5);
-				loc.setDirection(e.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
-				as.teleport(loc);
 				new BukkitRunnable() {
 					int i = 0;
 					@Override
@@ -86,7 +83,10 @@ public class SlayerMinionBlock extends MinionBlock {
 							as.teleport(getLocation().add(0.5, 1, 0.5));
 							cancel();
 						}
-						else if(i < 0.5 * animationLengthT) {
+						else if(i < 0.75 * animationLengthT) {
+							Location loc = SlayerMinionBlock.this.loc.clone().add(0.5, 1, 0.5);
+							loc.setDirection(e.getLocation().clone().add(0.5, 0, 0.5).subtract(loc.clone()).toVector().normalize());
+							as.teleport(loc);
 							as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 							if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
 								as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));

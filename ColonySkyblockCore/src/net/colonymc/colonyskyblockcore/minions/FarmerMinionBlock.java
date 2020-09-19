@@ -83,7 +83,7 @@ public class FarmerMinionBlock extends MinionBlock {
 						as.teleport(getLocation().add(0.5, 1, 0.5));
 						cancel();
 					}
-					else if(i < 0.5 * animationLengthT) {
+					else if(i < 0.75 * animationLengthT) {
 						as.setCustomNameVisible(false);
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
@@ -98,7 +98,7 @@ public class FarmerMinionBlock extends MinionBlock {
 					}
 				}
 				else if(wasAreaReady) {
-					if(i < 0.5 * animationLengthT) {
+					if(i < 0.75 * animationLengthT) {
 						as.setCustomNameVisible(true);
 						as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cPlanting crops..."));
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
@@ -122,7 +122,7 @@ public class FarmerMinionBlock extends MinionBlock {
 					}
 				}
 				else {
-					if(i < 0.5 * animationLengthT) {
+					if(i < 0.75 * animationLengthT) {
 						as.setCustomNameVisible(true);
 						as.setCustomName(ChatColor.translateAlternateColorCodes('&', "&cGetting the area ready..."));
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));

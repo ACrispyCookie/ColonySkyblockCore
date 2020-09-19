@@ -635,7 +635,7 @@ public class Main extends JavaPlugin{
 				    	auctionBidders.execute();
 				    	break;
 			    	case "ActiveMinions":
-				    	PreparedStatement activeMinions = conn.prepareStatement("CREATE TABLE ActiveMinions (id int(255), playerUuid varchar(255), materialType varchar(255), level int(255), x int(255), y int(255), z int(255), world varchar(255), lastProduced bigint(255), PRIMARY KEY (id));");
+				    	PreparedStatement activeMinions = conn.prepareStatement("CREATE TABLE ActiveMinions (id int(255), playerUuid varchar(255), materialType varchar(255), level int(255), x int(255), y int(255), z int(255), world varchar(255), lastProduced bigint(255), entityId varchar(255), PRIMARY KEY (id));");
 				    	activeMinions.execute();
 				    	break;
 			    	case "MinionInventories":

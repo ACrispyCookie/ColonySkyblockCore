@@ -148,7 +148,7 @@ public class MinerMinionBlock extends MinionBlock {
 					}
 				}
 				else {
-					if(i < 0.25 * animationLengthT) {
+					if(i < 0.38 * animationLengthT) {
 						as.setHeadPose(new EulerAngle(Math.toRadians(25), 0, 0));
 						if(as.getRightArmPose().getX() == -0.26 && as.getRightArmPose().getZ() == 0.17) {
 							as.setRightArmPose(new EulerAngle(Math.toRadians(-160), as.getRightArmPose().getY(), as.getRightArmPose().getZ()));
