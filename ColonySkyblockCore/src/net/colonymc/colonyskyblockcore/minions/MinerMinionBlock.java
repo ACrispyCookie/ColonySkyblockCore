@@ -110,7 +110,7 @@ public class MinerMinionBlock extends MinionBlock {
 			@Override
 			public void run() {
 				if(wasAreaReady) {
-					if(i == 0.87 * animationLengthT) {
+					if(i >= 0.87 * animationLengthT && i < animationLengthT) {
 						as.setRightArmPose(new EulerAngle(-0.26, 0, 0.17));
 						as.setHeadPose(new EulerAngle(0, 0, 0));
 						PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(as.getEntityId(), new BlockPosition(b.getX(), b.getY(), b.getZ()), -1);
@@ -125,6 +125,7 @@ public class MinerMinionBlock extends MinionBlock {
 					else if(i == animationLengthT) {
 						b.setType(getMinion().getBlocksNeeded());
 						as.teleport(getLocation().add(0.5, 1, 0.5));
+						as.setHeadPose(new EulerAngle(0, 0, 0));
 						cancel();
 					}
 					else if(i < 0.87 * animationLengthT) {
