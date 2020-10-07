@@ -56,7 +56,7 @@ public class GuildMembersMenu implements InventoryHolder, Listener {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		for(int i = 0; i < members.size(); i++) {
 			GuildPlayer p = members.get(i);
-			ItemStack member = new SkullItemBuilder().name("&d" + p.getPlayer().getName()).lore(
+			ItemStack member = new SkullItemBuilder().playerUuid(p.getPlayer().getUniqueId()).name("&d" + p.getPlayer().getName()).lore(
 					"\n  &5» &fGuild Rank: " + p.getRole().color + p.getRole().name + 
 					"\n  &5» &fJoin Timestamp: &d" + sdf.format(new Date(p.getJoinTimestamp())) + 
 					"\n \n&dClick to manage " + p.getPlayer().getName())
