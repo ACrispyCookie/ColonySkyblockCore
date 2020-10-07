@@ -59,7 +59,7 @@ public class GuildSelectLootMenu implements Listener, InventoryHolder {
 				for(ItemStack item : Guild.getByPlayer(p).getUnclaimedItems().get(pUuids.get(index))) {
 					itemsLeft = itemsLeft + item.getAmount();
 				}
-				inv.setItem(i, new SkullItemBuilder().playerName(Bukkit.getOfflinePlayer(UUID.fromString(pUuids.get(index))).getName())
+				inv.setItem(i, new SkullItemBuilder().playerUuid(UUID.fromString(pUuids.get(index)))
 						.name("&d" + Database.getName(pUuids.get(index)))
 						.lore("&fItems left: &d" + itemsLeft + "\n \n&dClick here to loot the member!")
 						.build());

@@ -99,7 +99,8 @@ public class ConfirmWarMenu implements Listener, InventoryHolder {
 				int row = i / 4;
 				int column = (i - (row * 4)) + 5;
 				int slot = 9 * row + column;
-				inv.setItem(slot, new SkullItemBuilder().playerName(guildPlayers.get(i).getPlayer().getName()).name("&d" + guildPlayers.get(i).getPlayer().getName())
+				inv.setItem(slot, new SkullItemBuilder().playerUuid(guildPlayers.get(i).getPlayer().getUniqueId())
+						.name("&d" + guildPlayers.get(i).getPlayer().getName())
 						.lore("&fStatus: " + ((w.getAccepted().contains(guildPlayers.get(i))) ? "&aReady" : "&cNot Ready"))
 						.build());
 			}
@@ -121,7 +122,8 @@ public class ConfirmWarMenu implements Listener, InventoryHolder {
 				int row = i / 4;
 				int column = i - (row * 4);
 				int slot = 9 * row + column;
-				inv.setItem(slot, new SkullItemBuilder().playerName(guildPlayers.get(i).getPlayer().getName()).name("&d" + guildPlayers.get(i).getPlayer().getName())
+				inv.setItem(slot, new SkullItemBuilder().playerUuid(guildPlayers.get(i).getPlayer().getUniqueId())
+						.name("&d" + guildPlayers.get(i).getPlayer().getName())
 						.lore("&fStatus: " + ((w.getAccepted().contains(guildPlayers.get(i))) ? "&aReady" : "&cNot Ready"))
 						.build());
 			}

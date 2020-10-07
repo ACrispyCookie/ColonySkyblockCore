@@ -83,7 +83,7 @@ public class GuildMainMenu implements InventoryHolder, Listener {
 				.glint(true)
 				.build();
 		inv.setItem(10, guildStats);
-		ItemStack members = new SkullItemBuilder().playerName(p.getName())
+		ItemStack members = new SkullItemBuilder().playerUuid(p.getUniqueId())
 				.name("&dManage guild members")
 				.lore("\n&fManage the members of your guild!\n"
 				+ "&fKick, promote and demote members\n&fin this menu!\n \n&dClick here to open this menu!")

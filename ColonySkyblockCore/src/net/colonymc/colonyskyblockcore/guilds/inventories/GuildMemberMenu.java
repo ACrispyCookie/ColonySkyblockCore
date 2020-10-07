@@ -60,7 +60,7 @@ public class GuildMemberMenu implements InventoryHolder, Listener {
 				afterDemotion = Role.values()[gp.getRole().ordinal() - 1];
 			}
 		}
-		inv.setItem(13, new SkullItemBuilder().playerName(gp.getPlayer().getName())
+		inv.setItem(13, new SkullItemBuilder().playerUuid(gp.getPlayer().getUniqueId())
 				.name("&d" + gp.getPlayer().getName())
 				.lore("\n  &5» &fGuild Rank: " + gp.getRole().color + gp.getRole().name + 
 				"\n  &5» &fJoin Timestamp: &d" + sdf.format(new Date(gp.getJoinTimestamp())) + 
