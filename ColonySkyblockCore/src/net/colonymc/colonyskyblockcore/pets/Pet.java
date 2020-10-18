@@ -3,6 +3,7 @@ package net.colonymc.colonyskyblockcore.pets;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -20,7 +21,6 @@ import net.colonymc.api.itemstacks.SkullItemBuilder;
 import net.colonymc.api.player.Particle;
 import net.colonymc.api.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Main;
-import net.minecraft.server.v1_8_R3.EnumParticle;
 
 public class Pet implements Listener {
 	
@@ -51,7 +51,7 @@ public class Pet implements Listener {
 		stand.setRightArmPose(new EulerAngle(0, 0, 0));
 		stand.setCustomName(ChatColor.translateAlternateColorCodes('&', type.name));
 		stand.setItemInHand(new SkullItemBuilder().url("http://textures.minecraft.net/texture/" + type.url).build());
-		particle = new Particle(EnumParticle.CLOUD, 0, stand.getLocation().add(0, 1, 0));
+		particle = new Particle(Effect.CLOUD, 0, stand.getLocation().add(0, 1, 0));
 		particle.play(p);
 		p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou have spawned a " + PetItem.whatType(p.getItemInHand()).name + " Pet&f!"));
 		startTask();

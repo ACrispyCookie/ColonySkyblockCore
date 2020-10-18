@@ -2,6 +2,7 @@ package net.colonymc.colonyskyblockcore.npcs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,7 +24,6 @@ import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionHouseSelectMenu;
 import net.colonymc.colonyskyblockcore.guilds.bank.BankInventory;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
-import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
@@ -93,7 +93,7 @@ public class NPCListener implements Listener {
 			int i = 0;
 	        WorldServer s = ((CraftWorld)npc.getEntity().getWorld()).getHandle();
 	        EntityArmorStand eas = new EntityArmorStand(s);
-			Particle par = new Particle(EnumParticle.CLOUD, 0, new Location(npc.getEntity().getWorld(), eas.locX, eas.locY, eas.locZ).add(0, 1.5, 0));
+			Particle par = new Particle(Effect.CLOUD, 0, new Location(npc.getEntity().getWorld(), eas.locX, eas.locY, eas.locZ).add(0, 1.5, 0));
 			@Override
 			public void run() {
 				if(out) {
@@ -121,7 +121,7 @@ public class NPCListener implements Listener {
 					else {
 						par.stop();
 						p.playSound(p.getLocation(), Sound.EXPLODE, 2, 2);
-						par.setEffect(EnumParticle.EXPLOSION_HUGE, 0);
+						par.setEffect(Effect.EXPLOSION_HUGE, 0);
 						par.play(p, 1);
 						eas.setLocation(npc.getEntity().getLocation().getX(), npc.getEntity().getLocation().getY() + 0.35, npc.getEntity().getLocation().getZ(), 
 								npc.getEntity().getLocation().getPitch(), npc.getEntity().getLocation().getYaw());
@@ -163,7 +163,7 @@ public class NPCListener implements Listener {
 					else {
 						par.stop();
 						p.playSound(p.getLocation(), Sound.EXPLODE, 2, 2);
-						par.setEffect(EnumParticle.EXPLOSION_HUGE, 0);
+						par.setEffect(Effect.EXPLOSION_HUGE, 0);
 						par.play(p, 1);
 						eas.setLocation(npc.getEntity().getLocation().getX(), npc.getEntity().getLocation().getY() + 0.35, npc.getEntity().getLocation().getZ(), 
 								npc.getEntity().getLocation().getPitch(), npc.getEntity().getLocation().getYaw());
@@ -188,7 +188,7 @@ public class NPCListener implements Listener {
 	private static void afterReached(Player p, EntityArmorStand eas) {
 		new BukkitRunnable() {
 			int i = 0;
-			Particle par = new Particle(EnumParticle.SPELL_WITCH, 41, new Location(eas.getWorld().getWorld(), eas.locX, eas.locY, eas.locZ).add(0, 2, 0));
+			Particle par = new Particle(Effect.SPELL, 41, new Location(eas.getWorld().getWorld(), eas.locX, eas.locY, eas.locZ).add(0, 2, 0));
 			@Override
 			public void run() {
 				if(i == 0) {
