@@ -1,8 +1,0 @@
-eclipse.preferences.version=1
-encoding//src/net/colonymc/colonyskyblockcore/guilds/GuildCommand.java=UTF-8
-encoding//src/net/colonymc/colonyskyblockcore/guilds/auction/inventories/AuctionBidMenu.java=UTF-8
-encoding//src/net/colonymc/colonyskyblockcore/guilds/auction/inventories/AuctionCreateMenu.java=UTF-8
-encoding//src/net/colonymc/colonyskyblockcore/guilds/war/TeamDeathmatch.java=UTF-8
-encoding//src/net/colonymc/colonyskyblockcore/kits/KitsMenu.java=UTF-8
-encoding//src/net/colonymc/colonyskyblockcore/util/scoreboard/NormalBoard.java=UTF-8
-encoding//src/net/colonymc/colonyskyblockcore/util/scoreboard/WarBoard.java=UTF-8
