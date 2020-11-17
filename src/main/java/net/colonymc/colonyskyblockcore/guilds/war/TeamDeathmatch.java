@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import net.colonymc.colonyskyblockcore.util.scoreboard.ScoreboardManager;
+import net.colonymc.colonyspigotapi.player.ScoreboardManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -101,7 +101,7 @@ public class TeamDeathmatch implements Listener {
 				z++;
 			}
 			((Player) requester.get(i).getPlayer()).teleport(a.getFirstLocation().add(i, 0, z));
-			ScoreboardManager.getByPlayer(((Player) requester.get(i).getPlayer())).setType(ScoreboardManager.SCOREBOARD_TYPE.WAR);
+			ScoreboardManager.getByPlayer(((Player) requester.get(i).getPlayer())).setType("war");
 		}
 		ArrayList<GuildPlayer> requested = new ArrayList<>(war.getRequested().getMemberUuids().values());
 		z = 0;
@@ -110,7 +110,7 @@ public class TeamDeathmatch implements Listener {
 				z--;
 			}
 			((Player) requested.get(i).getPlayer()).teleport(a.getSecondLocation().add(-i, 0, z));
-			ScoreboardManager.getByPlayer(((Player) requested.get(i).getPlayer())).setType(ScoreboardManager.SCOREBOARD_TYPE.WAR);
+			ScoreboardManager.getByPlayer(((Player) requested.get(i).getPlayer())).setType("war");
 		}
 	}
 	
@@ -231,7 +231,7 @@ public class TeamDeathmatch implements Listener {
 								e.printStackTrace();
 							}
 						}
-						ScoreboardManager.getByPlayer(((Player) pl.getPlayer())).setType(ScoreboardManager.SCOREBOARD_TYPE.MAIN);
+						ScoreboardManager.getByPlayer(((Player) pl.getPlayer())).setType("main");
 						war.getRequested().getIsland().sendPlayer(((Player) pl.getPlayer()), false);
 					}
 				}
@@ -250,7 +250,7 @@ public class TeamDeathmatch implements Listener {
 								e.printStackTrace();
 							}
 						}
-						ScoreboardManager.getByPlayer(((Player) pl.getPlayer())).setType(ScoreboardManager.SCOREBOARD_TYPE.MAIN);
+						ScoreboardManager.getByPlayer(((Player) pl.getPlayer())).setType("main");
 						war.getRequester().getIsland().sendPlayer(((Player) pl.getPlayer()), false);
 					}
 				}
@@ -259,7 +259,7 @@ public class TeamDeathmatch implements Listener {
 	}
 	
 	public void addSpectator(Player p) {
-		ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.WAR);
+		ScoreboardManager.getByPlayer(p).setType("war");
 		spectators.add(p);
 		p.setHealth(20);
 		p.setSaturation(20);
@@ -719,7 +719,7 @@ public class TeamDeathmatch implements Listener {
 				}.runTaskLater(Main.getInstance(), 1);
 			}
 			else {
-				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.MAIN);
+				ScoreboardManager.getByPlayer(p).setType("main");
 				Guild g = Guild.getByPlayer(p);
 				g.getIsland().sendPlayer(p, false);
 				try {

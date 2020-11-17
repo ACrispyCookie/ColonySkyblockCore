@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import net.colonymc.colonyskyblockcore.util.scoreboard.ScoreboardManager;
-import net.colonymc.colonyspigotapi.player.PlayerInventory;
+import net.colonymc.colonyspigotapi.player.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -51,10 +50,10 @@ public class GuildListeners implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		new ScoreboardManager(p);
+		new ScoreboardManager(p, "main");
 		try {
 			if(Guild.hasGuild(p) == -1) {
-				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.STARTING);
+				ScoreboardManager.getByPlayer(p).setType("starting");
 				ResultSet rs = Database.getResultSet("SELECT * FROM PlayerInfo");
 				int unique = 1;
 				while(rs.next()) {
@@ -67,7 +66,7 @@ public class GuildListeners implements Listener {
 				forceCreate(p, true);
 			}
 			else if(Guild.hasGuild(p) == 0){
-				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.STARTING);
+				ScoreboardManager.getByPlayer(p).setType("starting");
 				e.setJoinMessage(null);
 				ResultSet rs = Database.getResultSet("SELECT * FROM PlayerInfo WHERE playerUuid='" + p.getUniqueId().toString() + "';");
 				if(rs.next()) {
@@ -80,7 +79,7 @@ public class GuildListeners implements Listener {
 				forceCreate(p, false);
 			}
 			else {
-				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.MAIN);
+				ScoreboardManager.getByPlayer(p).setType("main");
 				e.setJoinMessage(null);
 				Guild g = Guild.getByPlayer(p);
 				if(p.getWorld().equals(Island.getWorld())) {
