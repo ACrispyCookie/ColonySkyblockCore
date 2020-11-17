@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import net.colonymc.colonyskyblockcore.util.scoreboard.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -593,6 +594,7 @@ public class GuildCommand implements CommandExecutor {
 						g.createIsland();
 						creatingIsland.remove(g);
 						GuildListeners.isForced.remove(p);
+						ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.MAIN);
 						p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &d&l&k:&d&lGUILD CREATED!&k:&r &fYou have created the guild &d" + guildName + "&f!"));
 						p.sendTitle(ChatColor.translateAlternateColorCodes('&', "&d&k:&dGUILD CREATED&k:"), ChatColor.translateAlternateColorCodes('&', "&fYou created the guild &d" + guildName));
 						p.playSound(p.getLocation(), Sound.LEVEL_UP, 2, 1);

@@ -125,7 +125,6 @@ import net.colonymc.colonyskyblockcore.util.currencies.SilverCommand;
 import net.colonymc.colonyskyblockcore.util.messages.MessageCommand;
 import net.colonymc.colonyskyblockcore.util.messages.MessageListeners;
 import net.colonymc.colonyskyblockcore.util.messages.ReplyCommand;
-import net.colonymc.colonyskyblockcore.util.scoreboard.ScoreboardUtils;
 import net.colonymc.colonyskyblockcore.util.signs.SignGUI;
 
 public class Main extends JavaPlugin{
@@ -163,7 +162,6 @@ public class Main extends JavaPlugin{
 		loadKits();
 		loadCrate();
 		loadOnlinePlayers();
-		setupRunnables();
 		System.out.println(" » ColonySkyblockCore has been enabled successfully!");
 	}
 
@@ -465,18 +463,6 @@ public class Main extends JavaPlugin{
 				cmdProducts.add(p);
 			}
 		}
-	}
-	
-	public void setupRunnables() {
-		BukkitRunnable linesUpdate = new BukkitRunnable() {
-			@Override
-			public void run() {
-				for(Player p : Bukkit.getOnlinePlayers()) {
-					ScoreboardUtils.linesUpdate(p);
-				}
-			}
-		};
-		linesUpdate.runTaskTimer(this, 0, 10);
 	}
 	
 	public void initializeCommands() {

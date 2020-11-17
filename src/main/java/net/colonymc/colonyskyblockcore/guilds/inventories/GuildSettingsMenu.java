@@ -155,8 +155,8 @@ public class GuildSettingsMenu implements InventoryHolder, Listener{
 							if(!gm.p.hasPermission("*")) {
 								new Cooldown(gm.p.getUniqueId().toString(), CooldownType.DISBAND);
 							}
-							gm.gp.getGuild().disband();
 							gm.p.closeInventory();
+							gm.gp.getGuild().disband();
 						}
 						else {
 							Cooldown c = Cooldown.hasCooldown(gm.p, CooldownType.DISBAND);

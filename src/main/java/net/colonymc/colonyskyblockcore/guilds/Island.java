@@ -73,7 +73,7 @@ public class Island {
 			this.spawnLocation = new int[] {getNewX(), 100, 0};
 			this.homeLocation = new double[] {spawnLocation[0], spawnLocation[1], spawnLocation[2]};
 			this.borderColor = BorderColor.BLUE;
-			File file = new File("plugins/ColonySkyblockCore/arena.schematic");
+			File file = new File("plugins/ColonySkyblockCore/island.schematic");
 			try {
 				EditSession editSession = ClipboardFormats.findByFile(file).load(file).paste(FaweAPI.getWorld(w.getName()), new Vector(this.spawnLocation[0], 100, 0));
 			} catch (IOException e) {

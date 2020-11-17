@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import net.colonymc.colonyskyblockcore.util.scoreboard.ScoreboardManager;
+import net.colonymc.colonyspigotapi.player.PlayerInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -49,8 +51,10 @@ public class GuildListeners implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		new ScoreboardManager(p);
 		try {
 			if(Guild.hasGuild(p) == -1) {
+				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.STARTING);
 				ResultSet rs = Database.getResultSet("SELECT * FROM PlayerInfo");
 				int unique = 1;
 				while(rs.next()) {
@@ -63,6 +67,7 @@ public class GuildListeners implements Listener {
 				forceCreate(p, true);
 			}
 			else if(Guild.hasGuild(p) == 0){
+				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.STARTING);
 				e.setJoinMessage(null);
 				ResultSet rs = Database.getResultSet("SELECT * FROM PlayerInfo WHERE playerUuid='" + p.getUniqueId().toString() + "';");
 				if(rs.next()) {
@@ -75,6 +80,7 @@ public class GuildListeners implements Listener {
 				forceCreate(p, false);
 			}
 			else {
+				ScoreboardManager.getByPlayer(p).setType(ScoreboardManager.SCOREBOARD_TYPE.MAIN);
 				e.setJoinMessage(null);
 				Guild g = Guild.getByPlayer(p);
 				if(p.getWorld().equals(Island.getWorld())) {
@@ -221,6 +227,9 @@ public class GuildListeners implements Listener {
 				e.setCancelled(true);
 			}
 		}
+		else if(p.getWorld().equals(Bukkit.getWorld("hub")) && !p.hasPermission("*")){
+			e.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
@@ -231,6 +240,9 @@ public class GuildListeners implements Listener {
 			if(Island.getVisitorMap().containsKey(p) && !Island.getVisitorMap().get(p).equals(g.getIsland()) && !GuildCommand.bypasses.contains(p)) {
 				e.setCancelled(true);
 			}
+		}
+		else if(p.getWorld().equals(Bukkit.getWorld("hub")) && !p.hasPermission("*")){
+			e.setCancelled(true);
 		}
 	}
 	
@@ -243,6 +255,9 @@ public class GuildListeners implements Listener {
 				if(Island.getVisitorMap().containsKey(p) && !Island.getVisitorMap().get(p).equals(g.getIsland()) && !GuildCommand.bypasses.contains(p)) {
 					e.setCancelled(true);
 				}
+			}
+			else if(p.getWorld().equals(Bukkit.getWorld("hub")) && !p.hasPermission("*")){
+				e.setCancelled(true);
 			}
 		}
 	}
@@ -281,6 +296,9 @@ public class GuildListeners implements Listener {
 			else if(Island.getVisitorMap().containsKey(p) && !Island.getVisitorMap().get(p).equals(Guild.getByPlayer(p).getIsland()) && !GuildCommand.bypasses.contains(p)) {
 				e.setCancelled(true);
 			}
+			else if(p.getWorld().equals(Bukkit.getWorld("hub")) && !p.hasPermission("*")){
+				e.setCancelled(true);
+			}
 		}
 	}
 	
@@ -289,6 +307,9 @@ public class GuildListeners implements Listener {
 		if(e.getTarget() instanceof Player) {
 			Player p = (Player) e.getTarget();
 			if(Island.getVisitorMap().containsKey(p) && !Island.getVisitorMap().get(p).equals(Guild.getByPlayer(p).getIsland()) && !GuildCommand.bypasses.contains(p)) {
+				e.setCancelled(true);
+			}
+			else if(p.getWorld().equals(Bukkit.getWorld("hub")) && !p.hasPermission("*")){
 				e.setCancelled(true);
 			}
 		}
@@ -316,11 +337,20 @@ public class GuildListeners implements Listener {
 			else if(Island.getVisitorMap().containsKey(p) && !Island.getVisitorMap().get(p).equals(Guild.getByPlayer(p).getIsland()) && e.getCause() != DamageCause.ENTITY_ATTACK) {
 				e.setCancelled(true);
 			}
+			else if(p.getWorld().equals(Bukkit.getWorld("hub"))){
+				e.setCancelled(true);
+			}
 		}
 	}
 	
 	@EventHandler
 	public void onPotion(PotionSplashEvent e) {
+		if(e.getPotion().getShooter() instanceof Player){
+			Player pl = (Player) e.getPotion().getShooter();
+			if(pl.getWorld().equals(Bukkit.getWorld("hub")) && !pl.hasPermission("*")){
+				e.setCancelled(true);
+			}
+		}
 		for(Entity en : e.getAffectedEntities()) {
 			if(en instanceof Player) {
 				Player p = (Player) en;

@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.colonymc.colonyskyblockcore.util.scoreboard.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -280,6 +281,7 @@ public class Guild {
 			if(p.isOnline()) {
 				p.getPlayer().closeInventory();
 				p.getPlayer().chat("/spawn");
+				ScoreboardManager.getByPlayer(p.getPlayer()).setType(ScoreboardManager.SCOREBOARD_TYPE.STARTING);
 				GuildListeners.forceCreate((Player) p, false);
 			}
 			this.members.remove(p.getUniqueId());
