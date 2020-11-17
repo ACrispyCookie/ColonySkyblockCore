@@ -166,7 +166,7 @@ public class ScoreboardManager  {
                 while(index + increment < s.length() && s.charAt(index + increment) == ChatColor.COLOR_CHAR){
                     increment += 2;
                 }
-                end = increment + index < s.length() ? index + increment : s.length() - 1 ;
+                end = Math.min(increment + index, s.length());
                 increment = 0;
                 while(index - increment > 0 && s.charAt(index - increment) == ChatColor.COLOR_CHAR){
                     increment += 2;
