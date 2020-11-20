@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.colonymc.colonyspigotapi.player.ScoreboardManager;
+import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -20,8 +20,8 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.Serializer;
-import net.colonymc.colonyspigotapi.itemstacks.SkullItemBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.guilds.auction.Auction;
 import net.colonymc.colonyskyblockcore.guilds.bank.BankTransaction;
@@ -339,7 +339,7 @@ public class Guild {
 		}
 		for(ItemStack i : d.getItems(this)) {
 			Database.sendStatement("INSERT INTO WarItems (warId, guildId, item) VALUES "
-					+ "(" + d.getId() + ", " + this.getId() + ", '" + Serializer.serializeItemStack(i) + "');");
+					+ "(" + d.getId() + ", " + this.getId() + ", '" + ItemStackSerializer.serializeItemStack(i) + "');");
 		}
 	}
 	
@@ -354,7 +354,7 @@ public class Guild {
 		}
 		for(ItemStack i : items) {
 			Database.sendStatement("INSERT INTO GuildUnclaimed (guildId, playerUuid, item) VALUES "
-					+ "(" + this.getId() + ", '" + playerUuid + "', '" + Serializer.serializeItemStack(i) + "')");
+					+ "(" + this.getId() + ", '" + playerUuid + "', '" + ItemStackSerializer.serializeItemStack(i) + "')");
 		}
 	}
 	
@@ -364,7 +364,7 @@ public class Guild {
 			if(unclaimedItems.get(playerUuid).isEmpty()) {
 				unclaimedItems.remove(playerUuid);
 			}
-			Database.sendStatement("DELETE FROM GuildUnclaimed WHERE guildId=" + this.getId() + " AND playerUuid='" + playerUuid + "' AND item='" + Serializer.serializeItemStack(item) + "';");
+			Database.sendStatement("DELETE FROM GuildUnclaimed WHERE guildId=" + this.getId() + " AND playerUuid='" + playerUuid + "' AND item='" + ItemStackSerializer.serializeItemStack(item) + "';");
 		}
 	}
 	
@@ -735,7 +735,7 @@ public class Guild {
 				ArrayList<ItemStack> items = new ArrayList<>();
 				ResultSet rs1 = Database.getResultSet("SELECT * FROM GuildUnclaimed WHERE guildId=" + this.getId() + " AND playerUuid='" + uuid + "';");
 				while(rs1.next()) {
-					items.add(Serializer.deserializeItemStack(rs1.getString("item")));
+					items.add(ItemStackSerializer.deserializeItemStack(rs1.getString("item")));
 				}
 				unclaimedItems.put(uuid, items);
 			}
@@ -791,12 +791,12 @@ public class Guild {
 					ArrayList<ItemStack> items = new ArrayList<>();
 					ResultSet item = Database.getResultSet("SELECT * FROM WarItems WHERE warId=" + rs.getInt("warId") + " AND guildId=" +  rs.getInt("oneId") + ";");
 					while(item.next()) {
-						items.add(Serializer.deserializeItemStack(item.getString("item")));
+						items.add(ItemStackSerializer.deserializeItemStack(item.getString("item")));
 					}
 					ArrayList<ItemStack> otherItems = new ArrayList<>();
 					ResultSet otherItem = Database.getResultSet("SELECT * FROM WarItems WHERE warId=" + rs.getInt("warId") + " AND guildId=" + rs.getInt("anotherId") + ";");
 					while(otherItem.next()) {
-						otherItems.add(Serializer.deserializeItemStack(otherItem.getString("item")));
+						otherItems.add(ItemStackSerializer.deserializeItemStack(otherItem.getString("item")));
 					}
 					HashMap<Guild, ArrayList<ItemStack>> loot = new HashMap<>();
 					loot.put(oneGuild, items);

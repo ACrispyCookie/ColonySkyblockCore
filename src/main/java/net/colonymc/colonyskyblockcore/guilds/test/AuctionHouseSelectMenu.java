@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionCreateMenu;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionHouseMenu;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionManagePendingMenu;

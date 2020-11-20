@@ -16,8 +16,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.primitive.GetNames;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.MaterialName;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionMenuUtils;
@@ -64,7 +64,7 @@ public class ShopCategoryMenu implements InventoryHolder, Listener {
 				if(o instanceof Product) {
 					Product p = (Product) o;
 					ItemStack item = new ItemStackBuilder(p.getMaterial())
-							.name(ChatColor.WHITE + GetNames.itemName(p.getNewItem(), false))
+							.name(ChatColor.WHITE + MaterialName.itemName(p.getNewItem(), false))
 							.lore((p.isBuyable() ? "\n&5» &fBuy price: &d" + Guild.balance(p.getBuyPrice()) : "") + 
 							(p.isSellable() ? "\n&5» &fSell price: &d" + Guild.balance(p.getSellPrice()) : "") + "\n " +
 							(p.isBuyable() ? "\n&dLeft-Click to buy this item!" : "")
@@ -140,7 +140,7 @@ public class ShopCategoryMenu implements InventoryHolder, Listener {
 									int amount = ShopProductSellMenu.getAmountAvailable(menu.p, pr.getMaterial());
 									Guild.getByPlayer(menu.p).getGuildPlayer(menu.p).addBalance(amount * pr.getSellPrice());
 									menu.p.getInventory().removeItem(new ItemStack(pr.getMaterial(), amount));
-									menu.p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou just sold &d" + amount + "x &fof &d" + GetNames.itemName(new ItemStack(pr.getMaterial()), false) + " &ffor &d" + Guild.balance(amount * pr.getSellPrice()) + "&f!"));
+									menu.p.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou just sold &d" + amount + "x &fof &d" + MaterialName.itemName(new ItemStack(pr.getMaterial()), false) + " &ffor &d" + Guild.balance(amount * pr.getSellPrice()) + "&f!"));
 									menu.p.playSound(menu.p.getLocation(), Sound.NOTE_PLING, 2, 1);
 								}
 								else {

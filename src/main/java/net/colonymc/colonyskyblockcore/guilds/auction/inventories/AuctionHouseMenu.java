@@ -1,6 +1,6 @@
 package net.colonymc.colonyskyblockcore.guilds.auction.inventories;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.colonymc.colonyskyblockcore.guilds.auction.Auction;

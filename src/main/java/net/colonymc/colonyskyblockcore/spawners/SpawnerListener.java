@@ -11,19 +11,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
 
 public class SpawnerListener implements Listener {
 
 	@EventHandler
 	public void onPlace(BlockPlaceEvent e) {
 		if(e.getBlock().getType() == Material.MOB_SPAWNER) {
-			if(NBTItems.hasTag(e.getItemInHand(), "skyblockSpawner")) {
+			if(ItemStackNBT.hasTag(e.getItemInHand(), "skyblockSpawner")) {
 				e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &fYou have placed a " + e.getItemInHand().getItemMeta().getDisplayName() + "&f!"));
 				Block block = e.getBlock();
 				BlockState bs = block.getState();
 				CreatureSpawner cs = (CreatureSpawner) bs;
-				cs.setSpawnedType(EntityType.valueOf(NBTItems.getString(e.getItemInHand(), "skyblockSpawner")));
+				cs.setSpawnedType(EntityType.valueOf(ItemStackNBT.getString(e.getItemInHand(), "skyblockSpawner")));
 				bs.update();
 			}
 		}

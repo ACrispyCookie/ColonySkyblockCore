@@ -14,8 +14,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.primitive.GetNames;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.MaterialName;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 
@@ -30,7 +30,7 @@ public class ShopProductSellMenu implements InventoryHolder, Listener {
 		this.p = p;
 		this.pr = pr;
 		this.amount = pr.getDefaultAmount();
-		this.inv = Bukkit.createInventory(this, 54, "Selling " + GetNames.itemName(pr.getNewItem(), false) + "...");
+		this.inv = Bukkit.createInventory(this, 54, "Selling " + MaterialName.itemName(pr.getNewItem(), false) + "...");
 		fillInventory();
 		new BukkitRunnable() {
 			@Override
@@ -72,7 +72,7 @@ public class ShopProductSellMenu implements InventoryHolder, Listener {
 	
 	public void update() {
 		ItemStack item = new ItemStackBuilder(pr.getMaterial())
-				.name(ChatColor.WHITE + GetNames.itemName(pr.getNewItem(), false))
+				.name(ChatColor.WHITE + MaterialName.itemName(pr.getNewItem(), false))
 				.lore((pr.isBuyable() ? "\n&5» &fBuy price: &d" + Guild.balance(pr.getBuyPrice()) : "") + "\n&5» &fSell price: &d" + Guild.balance(pr.getSellPrice()))
 				.build();
 		item.setAmount(amount);
@@ -179,7 +179,7 @@ public class ShopProductSellMenu implements InventoryHolder, Listener {
 						Guild.getByPlayer(p).getGuildPlayer(p).addBalance(amount * menu.pr.getSellPrice());
 						p.getInventory().removeItem(new ItemStack(menu.pr.getMaterial(), amount));
 						p.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-								" &5&l» &fYou just sold &d" + amount + "x &fof &d" + GetNames.itemName(new ItemStack(menu.pr.getMaterial()), false) + " &ffor &d" + Guild.balance(amount * menu.pr.getSellPrice()) + "&f!"));
+								" &5&l» &fYou just sold &d" + amount + "x &fof &d" + MaterialName.itemName(new ItemStack(menu.pr.getMaterial()), false) + " &ffor &d" + Guild.balance(amount * menu.pr.getSellPrice()) + "&f!"));
 						p.playSound(p.getLocation(), Sound.NOTE_PLING, 2, 1);
 					}
 					else {

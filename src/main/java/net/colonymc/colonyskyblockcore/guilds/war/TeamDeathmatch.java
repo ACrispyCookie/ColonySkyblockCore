@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import net.colonymc.colonyspigotapi.player.ScoreboardManager;
+import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -38,9 +38,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.itemstacks.Serializer;
-import net.colonymc.colonyspigotapi.messages.Message;
-import net.colonymc.colonyspigotapi.player.PlayerInventory;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
+import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
@@ -223,7 +223,7 @@ public class TeamDeathmatch implements Listener {
 								ResultSet rs = Database.getResultSet("SELECT * FROM FriendlyWarItems WHERE playerUuid='" + pl.getPlayer().getUniqueId().toString() + "';");
 								ArrayList<ItemStack> items = new ArrayList<>();
 								while(rs.next()) {
-									items.add(Serializer.deserializeItemStack(rs.getString("item")));
+									items.add(ItemStackSerializer.deserializeItemStack(rs.getString("item")));
 								}
 								PlayerInventory.addItems(items, pl.getPlayer().getPlayer());
 								Database.sendStatement("DELETE FROM FriendlyWarItems WHERE playerUuid='" + pl.getPlayer().getUniqueId().toString() + "';");
@@ -242,7 +242,7 @@ public class TeamDeathmatch implements Listener {
 								ResultSet rs = Database.getResultSet("SELECT * FROM FriendlyWarItems WHERE playerUuid='" + pl.getPlayer().getUniqueId().toString() +  "';");
 								ArrayList<ItemStack> items = new ArrayList<>();
 								while(rs.next()) {
-									items.add(Serializer.deserializeItemStack(rs.getString("item")));
+									items.add(ItemStackSerializer.deserializeItemStack(rs.getString("item")));
 								}
 								PlayerInventory.addItems(items, pl.getPlayer().getPlayer());
 								Database.sendStatement("DELETE FROM FriendlyWarItems WHERE playerUuid='" + pl.getPlayer().getUniqueId().toString() + "';");
@@ -342,15 +342,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&c&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&c&lDEFEAT!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&c&lDEFEAT!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have lost the war!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&c&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -359,15 +359,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&a&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&a&lVICTORY!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&a&lVICTORY!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have won the war!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d10 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d" + Guild.balance(moneyCollected)).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d10 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d" + Guild.balance(moneyCollected)).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&a&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -378,15 +378,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&c&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&c&lDEFEAT!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&c&lDEFEAT!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have lost the war!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&c&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -395,15 +395,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&a&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&a&lVICTORY!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&a&lVICTORY!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have won the war!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&a&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -416,15 +416,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have ran out of time!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -433,15 +433,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have ran out of time!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d" + getItemsCollected(p.getGuild())).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -452,15 +452,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have ran out of time!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -469,15 +469,15 @@ public class TeamDeathmatch implements Listener {
 					if(p.getPlayer().isOnline()) {
 						String message = ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                &r");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&6&lDRAW!").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n" + ChatColor.translateAlternateColorCodes('&', "                    &fYou have ran out of time!");
 						p.getPlayer().getPlayer().sendMessage(message);
-						new Message("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
-						new Message("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fWar Duration: &d" + new SimpleDateFormat("mm:ss").format(new Date(timeEnded - timeStarted))).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fYour damage: &c" + (damages.get(p.getPlayer().getPlayer()) == null ? "0" : damages.get(p.getPlayer().getPlayer())) + "❤").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fTop Damager: " + (topDamager == null ? "&7None" : "&d" + topDamager.getName() + " &f(&c" + damages.get(topDamager) + "❤&f)")).centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n \n&fLevels Gained: &d0 power levels").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fItems Collected: &d0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
+						new ChatMessage("\n&fMoney Collected: &d$0").centered(true).addRecipient(p.getPlayer().getPlayer()).send();
 						message = "\n \n" + ChatColor.translateAlternateColorCodes('&', "&6&m                                                                                ");
 						p.getPlayer().getPlayer().sendMessage(message);
 					}
@@ -708,7 +708,7 @@ public class TeamDeathmatch implements Listener {
 							ResultSet rs = Database.getResultSet("SELECT * FROM FriendlyWarItems WHERE playerUuid='" + p.getUniqueId().toString() + "';");
 							ArrayList<ItemStack> items = new ArrayList<>();
 							while(rs.next()) {
-								items.add(Serializer.deserializeItemStack(rs.getString("item")));
+								items.add(ItemStackSerializer.deserializeItemStack(rs.getString("item")));
 								Database.sendStatement("DELETE FROM FriendlyWarItems WHERE playerUuid='" + p.getUniqueId().toString() + "' AND item='" + rs.getString("item") + "';");
 							}
 							PlayerInventory.addItems(items, p);
@@ -726,7 +726,7 @@ public class TeamDeathmatch implements Listener {
 					ResultSet rs = Database.getResultSet("SELECT * FROM FriendlyWarItems WHERE playerUuid='" + p.getUniqueId().toString() + "';");
 					ArrayList<ItemStack> items = new ArrayList<>();
 					while(rs.next()) {
-						items.add(Serializer.deserializeItemStack(rs.getString("item")));
+						items.add(ItemStackSerializer.deserializeItemStack(rs.getString("item")));
 						Database.sendStatement("DELETE FROM FriendlyWarItems WHERE playerUuid='" + p.getUniqueId().toString() + "' AND item='" + rs.getString("item") + "';");
 					}
 					PlayerInventory.addItems(items, p);
@@ -761,13 +761,13 @@ public class TeamDeathmatch implements Listener {
 					for(ItemStack i : p.getInventory().getContents()) {
 						if(i != null && i.getType() != Material.AIR) {
 							Database.sendStatement("INSERT INTO FriendlyWarItems (playerUuid, item) VALUES "
-									+ "('" + p.getUniqueId().toString() + "', '" + Serializer.serializeItemStack(i) + "')");
+									+ "('" + p.getUniqueId().toString() + "', '" + ItemStackSerializer.serializeItemStack(i) + "')");
 						}
 					}
 					for(ItemStack i : p.getInventory().getArmorContents()) {
 						if(i != null && i.getType() != Material.AIR) {
 							Database.sendStatement("INSERT INTO FriendlyWarItems (playerUuid, item) VALUES "
-									+ "('" + p.getUniqueId().toString() + "', '" + Serializer.serializeItemStack(i) + "')");
+									+ "('" + p.getUniqueId().toString() + "', '" + ItemStackSerializer.serializeItemStack(i) + "')");
 						}
 					}
 				}
@@ -806,13 +806,13 @@ public class TeamDeathmatch implements Listener {
 					for(ItemStack i : p.getInventory().getContents()) {
 						if(i != null && i.getType() != Material.AIR) {
 							Database.sendStatement("INSERT INTO FriendlyWarItems (playerUuid, item) VALUES "
-									+ "('" + p.getUniqueId().toString() + "', '" + Serializer.serializeItemStack(i) + "')");
+									+ "('" + p.getUniqueId().toString() + "', '" + ItemStackSerializer.serializeItemStack(i) + "')");
 						}
 					}
 					for(ItemStack i : p.getInventory().getArmorContents()) {
 						if(i != null && i.getType() != Material.AIR) {
 							Database.sendStatement("INSERT INTO FriendlyWarItems (playerUuid, item) VALUES "
-									+ "('" + p.getUniqueId().toString() + "', '" + Serializer.serializeItemStack(i) + "')");
+									+ "('" + p.getUniqueId().toString() + "', '" + ItemStackSerializer.serializeItemStack(i) + "')");
 						}
 					}
 				}
@@ -902,7 +902,7 @@ public class TeamDeathmatch implements Listener {
 				for(ItemStack i : e.getDrops()) {
 					if(i != null && i.getType() != Material.AIR) {
 						Database.sendStatement("INSERT INTO FriendlyWarItems (playerUuid, item) VALUES "
-								+ "('" + e.getEntity().getUniqueId().toString() + "', '" + Serializer.serializeItemStack(i) + "')");
+								+ "('" + e.getEntity().getUniqueId().toString() + "', '" + ItemStackSerializer.serializeItemStack(i) + "')");
 					}
 				}
 				e.getDrops().clear();

@@ -9,9 +9,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
-import net.colonymc.colonyspigotapi.primitive.RomanNumber;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 import net.minecraft.server.v1_8_R3.NBTTagString;
@@ -59,14 +59,14 @@ public class PouchItem implements Listener {
 	
 	public static boolean isPouch(ItemStack item) {
 		if(item.hasItemMeta()) {
-            return NBTItems.hasTag(item, "skyblockPouch");
+            return ItemStackNBT.hasTag(item, "skyblockPouch");
 		}
 		return false;
 	}
 	
 	public static PouchType whatType(ItemStack item) {
 		if(isPouch(item)) {
-			return PouchType.valueOf(NBTItems.getString(item, "skyblockPouch"));
+			return PouchType.valueOf(ItemStackNBT.getString(item, "skyblockPouch"));
 		}
 		return null;
 	}
@@ -78,7 +78,7 @@ public class PouchItem implements Listener {
 			if(p.getItemInHand() != null && PouchItem.isPouch(p.getItemInHand())) {
 				e.setCancelled(true);
 				if(Pouch.getByPlayer(p) == null) {
-					Pouch pouch = new Pouch(p, PouchItem.whatType(p.getItemInHand()), NBTItems.getInt(p.getItemInHand(), "pouchLevel"));
+					Pouch pouch = new Pouch(p, PouchItem.whatType(p.getItemInHand()), ItemStackNBT.getInt(p.getItemInHand(), "pouchLevel"));
 					ItemStack item = p.getItemInHand().clone();
 					item.setAmount(item.getAmount() - 1);
 					p.setItemInHand(item);

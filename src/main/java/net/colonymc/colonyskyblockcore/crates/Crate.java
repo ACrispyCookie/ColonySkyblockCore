@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 
-import net.colonymc.colonyspigotapi.player.PublicHologram;
+import net.colonymc.colonyspigotapi.api.holograms.PublicHologram;
 import net.colonymc.colonyskyblockcore.Main;
 
 public class Crate implements Listener {

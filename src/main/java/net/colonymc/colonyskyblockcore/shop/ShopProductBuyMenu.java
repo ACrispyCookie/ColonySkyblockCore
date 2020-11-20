@@ -2,10 +2,10 @@ package net.colonymc.colonyskyblockcore.shop;
 
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.player.PlayerInventory;
-import net.colonymc.colonyspigotapi.primitive.GetNames;
-import net.colonymc.colonyspigotapi.primitive.Numbers;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
+import net.colonymc.colonyspigotapi.api.itemstack.MaterialName;
+import net.colonymc.colonyspigotapi.api.primitive.Numbers;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ public class ShopProductBuyMenu implements InventoryHolder, Listener {
 		this.p = p;
 		this.pr = pr;
 		this.amount = pr.getDefaultAmount();
-		this.inv = Bukkit.createInventory(this, 54, "Buying " + GetNames.itemName(pr.getNewItem(), false) + "...");
+		this.inv = Bukkit.createInventory(this, 54, "Buying " + MaterialName.itemName(pr.getNewItem(), false) + "...");
 		fillInventory();
 		new BukkitRunnable() {
 			@Override
@@ -92,7 +92,7 @@ public class ShopProductBuyMenu implements InventoryHolder, Listener {
 	public void update() {
 		if(pr != null) {
 			ItemStack item = new ItemStackBuilder(pr.getMaterial())
-					.name(ChatColor.WHITE + GetNames.itemName(pr.getNewItem(), false))
+					.name(ChatColor.WHITE + MaterialName.itemName(pr.getNewItem(), false))
 					.lore("\n&5» &fBuy price: &d" + Guild.balance(pr.getBuyPrice()) + (pr.isSellable() ? "\n&5» &fSell price: &d" + Guild.balance(pr.getSellPrice()) : ""))
 					.build();
 			item.setAmount(amount > pr.getMaterial().getMaxStackSize() ? pr.getMaterial().getMaxStackSize() : amount);
@@ -216,7 +216,7 @@ public class ShopProductBuyMenu implements InventoryHolder, Listener {
 							Guild.getByPlayer(p).getGuildPlayer(p).removeBalance(amount * menu.pr.getBuyPrice());
 							PlayerInventory.addItem(new ItemStack(menu.pr.getMaterial()), p, amount);
 							p.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-									" &5&l» &fYou just bought &d" + amount + "x &fof &d" + GetNames.itemName(new ItemStack(menu.pr.getMaterial()), false) + " &ffor &d" + Guild.balance(amount * menu.pr.getBuyPrice()) + "&f!"));
+									" &5&l» &fYou just bought &d" + amount + "x &fof &d" + MaterialName.itemName(new ItemStack(menu.pr.getMaterial()), false) + " &ffor &d" + Guild.balance(amount * menu.pr.getBuyPrice()) + "&f!"));
 							p.playSound(p.getLocation(), Sound.NOTE_PLING, 2, 1);
 						}
 						else {

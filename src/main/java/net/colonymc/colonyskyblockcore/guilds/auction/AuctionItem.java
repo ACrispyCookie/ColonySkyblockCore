@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.primitive.GetNames;
-import net.colonymc.colonyspigotapi.primitive.RomanNumber;
+import net.colonymc.colonyspigotapi.api.itemstack.MaterialName;
+import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
 
 public class AuctionItem {
 	
@@ -37,10 +37,10 @@ public class AuctionItem {
 				for(int in = 0; in < i.getEnchantments().size(); in++) {
 					Enchantment e = enchants.get(in);
 					if(in == 0) {
-						this.lore = lore + ("&7" + GetNames.enchantmentName(e, false) + " " + RomanNumber.toRoman(i.getEnchantments().get(e)));
+						this.lore = lore + ("&7" + MaterialName.enchantmentName(e, false) + " " + RomanNumber.toRoman(i.getEnchantments().get(e)));
 					}
 					else {
-						this.lore = lore + "\n" + ("&7" + GetNames.enchantmentName(e, false) + " " + RomanNumber.toRoman(i.getEnchantments().get(e)));
+						this.lore = lore + "\n" + ("&7" + MaterialName.enchantmentName(e, false) + " " + RomanNumber.toRoman(i.getEnchantments().get(e)));
 					}
 				}
 				this.lore = lore + "\n&f&m-----------------------------&r\n ";
@@ -52,11 +52,11 @@ public class AuctionItem {
 				this.displayName = i.getItemMeta().getDisplayName();
 			}
 			else {
-				this.displayName = GetNames.itemName(i, false);
+				this.displayName = MaterialName.itemName(i, false);
 			}
 		}
 		else {
-			this.displayName = GetNames.itemName(i, false);
+			this.displayName = MaterialName.itemName(i, false);
 			this.lore = "";
 		}
 	}

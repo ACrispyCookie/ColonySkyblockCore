@@ -6,13 +6,13 @@ import java.lang.reflect.InvocationTargetException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 
 public class FuelChecker {
 	
 	public static boolean isFuel(ItemStack item) {
-		return item != null && item.hasItemMeta() && item.getType() != Material.AIR && NBTItems.hasTag(item, "minionFuel");
+		return item != null && item.hasItemMeta() && item.getType() != Material.AIR && ItemStackNBT.hasTag(item, "minionFuel");
 	}
 	
 	public static Fuel getFuel(ItemStack i) {
@@ -20,8 +20,8 @@ public class FuelChecker {
 			Class<?> cl = Class.forName("net.colonymc.colonyskyblockcore.minions.fuel.types." + whatType(i).className);
 			Constructor<?> con = cl.getDeclaredConstructors()[0];
 			Fuel item;
-			if(NBTItems.hasTag(i, "fuelDurationLeft")) {
-				int durationLeft = ((NBTTagInt) NBTItems.getTag(i, "fuelDurationLeft")).d();
+			if(ItemStackNBT.hasTag(i, "fuelDurationLeft")) {
+				int durationLeft = ((NBTTagInt) ItemStackNBT.getTag(i, "fuelDurationLeft")).d();
 				item = (Fuel) con.newInstance(i, durationLeft);
 			}
 			else {
@@ -36,7 +36,7 @@ public class FuelChecker {
 	
 	public static FuelType whatType(ItemStack item) {
 		if(item != null && item.getItemMeta() != null && item.getType() != Material.AIR && isFuel(item)) {
-				return FuelType.valueOf(NBTItems.getString(item, "minionFuel"));
+				return FuelType.valueOf(ItemStackNBT.getString(item, "minionFuel"));
 		}
 		return null;
 	}

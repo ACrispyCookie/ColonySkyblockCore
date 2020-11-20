@@ -34,8 +34,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.itemstacks.Serializer;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
 import net.colonymc.colonyskyblockcore.crates.Crate;
 import net.colonymc.colonyskyblockcore.crates.CrateMenu;
 import net.colonymc.colonyskyblockcore.guilds.AdminGuildCommand;
@@ -322,7 +322,7 @@ public class Main extends JavaPlugin{
 		try {
 			while(rs.next()) {
 				OfflinePlayer seller = Bukkit.getOfflinePlayer(UUID.fromString(rs.getString("seller")));
-				AuctionItem item = new AuctionItem(Serializer.deserializeItemStack(rs.getString("item")));
+				AuctionItem item = new AuctionItem(ItemStackSerializer.deserializeItemStack(rs.getString("item")));
 				int id = rs.getInt("id");
 				long duration = rs.getLong("timeEnds") - System.currentTimeMillis();
 				int startingPrice = rs.getInt("startingPrice");
@@ -382,7 +382,7 @@ public class Main extends JavaPlugin{
 				while(item.next()) {
 					int amount = item.getInt("amount");
 					if(amount > 0) {
-						ItemStack i = Serializer.deserializeItemStack(item.getString("item"));
+						ItemStack i = ItemStackSerializer.deserializeItemStack(item.getString("item"));
 						items.put(i, amount);
 					}
 				}

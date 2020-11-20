@@ -30,10 +30,10 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.itemstacks.Serializer;
-import net.colonymc.colonyspigotapi.itemstacks.SkullItemBuilder;
-import net.colonymc.colonyspigotapi.player.PlayerInventory;
-import net.colonymc.colonyspigotapi.primitive.RomanNumber;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
+import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;
@@ -286,10 +286,10 @@ public abstract class MinionBlock implements Listener {
 		}
 		for(ItemStack i : this.items.keySet()) {
 			if(newItems.contains(i)) {
-				Database.sendStatement("INSERT INTO MinionInventories (id, item, amount) VALUES (" + id + ", '" + Serializer.serializeItemStack(i) + "', " + this.items.get(i) + ");");
+				Database.sendStatement("INSERT INTO MinionInventories (id, item, amount) VALUES (" + id + ", '" + ItemStackSerializer.serializeItemStack(i) + "', " + this.items.get(i) + ");");
 			}
 			else {
-				Database.sendStatement("UPDATE MinionInventories SET amount=" + this.items.get(i) + " WHERE id=" + id + " AND item='" + Serializer.serializeItemStack(i) + "';");
+				Database.sendStatement("UPDATE MinionInventories SET amount=" + this.items.get(i) + " WHERE id=" + id + " AND item='" + ItemStackSerializer.serializeItemStack(i) + "';");
 			}
 		}
 	}
@@ -319,11 +319,11 @@ public abstract class MinionBlock implements Listener {
 				PlayerInventory.addItems(toDropList, p);
 				if(amount == items.get(item)) {
 					toRemoveAfter = item;
-					Database.sendStatement("DELETE FROM MinionInventories WHERE id=" + id + " AND item='" + Serializer.serializeItemStack(item) + "';");
+					Database.sendStatement("DELETE FROM MinionInventories WHERE id=" + id + " AND item='" + ItemStackSerializer.serializeItemStack(item) + "';");
 				}
 				else {
 					items.put(item, items.get(item) - amount);
-					Database.sendStatement("UPDATE MinionInventories SET amount=" + (items.get(item) - amount) + " WHERE id=" + id + " AND item='" + Serializer.serializeItemStack(item) + "';");
+					Database.sendStatement("UPDATE MinionInventories SET amount=" + (items.get(item) - amount) + " WHERE id=" + id + " AND item='" + ItemStackSerializer.serializeItemStack(item) + "';");
 				}
 			}
 		}

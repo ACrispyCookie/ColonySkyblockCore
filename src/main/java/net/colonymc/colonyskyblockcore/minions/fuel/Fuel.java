@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
@@ -65,7 +65,7 @@ public abstract class Fuel {
 			items.add(toAdd);
 		}
 		item.setAmount(1);
-		item = NBTItems.addTag(item, "fuelDurationLeft", new NBTTagInt(getTimeLeft()));
+		item = ItemStackNBT.addTag(item, "fuelDurationLeft", new NBTTagInt(getTimeLeft()));
 		items.add(item);
 		return items;
 	}

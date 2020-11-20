@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.colonymc.colonyskyblockcore.guilds.Relation;
 import net.colonymc.colonyskyblockcore.guilds.auction.Auction;
@@ -49,7 +49,7 @@ public class AuctionMenuUtils {
 								new ItemStackBuilder(a.getItemSold().getItem().getType())
 								.name("&d[" + endsIn + "] &f" + a.getItemSold().getName())
 								.lore(a.getItemSold().getLore() + line)
-								.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+								.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 								.build();
 						item.setAmount(a.getItemSold().getItem().getAmount());
 						item.setDurability(a.getItemSold().getItem().getDurability());
@@ -72,7 +72,7 @@ public class AuctionMenuUtils {
 									new ItemStackBuilder(a.getItemSold().getItem().getType())
 									.name("&d[" + endsIn + "] &f" + a.getItemSold().getName())
 									.lore(a.getItemSold().getLore() + line)
-									.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+									.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 									.build();
 							item.setAmount(a.getItemSold().getItem().getAmount());
 							item.setDurability(a.getItemSold().getItem().getDurability());
@@ -94,7 +94,7 @@ public class AuctionMenuUtils {
 									new ItemStackBuilder(a.getItemSold().getItem().getType())
 									.name("&d[" + endsIn + "] &f" + a.getItemSold().getName())
 									.lore(a.getItemSold().getLore() + line)
-									.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+									.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 									.build();
 							item.setAmount(a.getItemSold().getItem().getAmount());
 							item.setDurability(a.getItemSold().getItem().getDurability());
@@ -118,7 +118,7 @@ public class AuctionMenuUtils {
 							new ItemStackBuilder(a.getItemSold().getItem().getType())
 							.name("&d[" + endsIn + "] &f" + a.getItemSold().getName())
 							.lore(a.getItemSold().getLore() + line)
-							.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+							.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 							.build();
 					item.setAmount(a.getItemSold().getItem().getAmount());
 					item.setDurability(a.getItemSold().getItem().getDurability());
@@ -141,7 +141,7 @@ public class AuctionMenuUtils {
 						new ItemStackBuilder(a.getItemSold().getItem().getType())
 						.name("&d[" + endsIn + "] &f" + a.getItemSold().getName())
 						.lore(a.getItemSold().getLore() + line)
-						.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+						.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 						.build();
 				item.setAmount(a.getItemSold().getItem().getAmount());
 				item.setDurability(a.getItemSold().getItem().getDurability());
@@ -164,7 +164,7 @@ public class AuctionMenuUtils {
 					new ItemStackBuilder(a.getItemSold().getItem().getType())
 					.name("&d[" + endsIn + "] &f" + a.getItemSold().getName())
 					.lore(a.getItemSold().getLore() + line)
-					.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+					.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 					.build();
 			item.setAmount(a.getItemSold().getItem().getAmount());
 			item.setDurability(a.getItemSold().getItem().getDurability());
@@ -196,7 +196,7 @@ public class AuctionMenuUtils {
 					new ItemStackBuilder(a.getItemSold().getItem().getType())
 					.name("&d[ENDED!] &f" + a.getItemSold().getName())
 					.lore(a.getItemSold().getLore() + line)
-					.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+					.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 					.build();
 			item.setAmount(a.getItemSold().getItem().getAmount());
 			item.setDurability(a.getItemSold().getItem().getDurability());
@@ -207,7 +207,7 @@ public class AuctionMenuUtils {
 					new ItemStackBuilder(a.getItemSold().getItem().getType())
 					.name("&d[" + InventoryUtils.getDurationString(a.getEndTimeStamp() - System.currentTimeMillis()) + "] &f" + a.getItemSold().getName())
 					.lore(a.getItemSold().getLore() + line)
-					.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+					.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 					.build();
 			item.setAmount(a.getItemSold().getItem().getAmount());
 			item.setDurability(a.getItemSold().getItem().getDurability());
@@ -256,7 +256,7 @@ public class AuctionMenuUtils {
 					new ItemStackBuilder(a.getItemSold().getItem().getType())
 					.name("&d[ENDED!] &f" + a.getItemSold().getName())
 					.lore(a.getItemSold().getLore() + line)
-					.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+					.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 					.build();
 			item.setAmount(a.getItemSold().getItem().getAmount());
 			item.setDurability(a.getItemSold().getItem().getDurability());
@@ -267,7 +267,7 @@ public class AuctionMenuUtils {
 					new ItemStackBuilder(a.getItemSold().getItem().getType())
 					.name("&d[" + InventoryUtils.getDurationString(a.getEndTimeStamp() - System.currentTimeMillis()) + "] &f" + a.getItemSold().getName())
 					.lore(a.getItemSold().getLore() + line)
-					.glint(NBTItems.hasTag(a.getItemSold().getItem(), "ench"))
+					.glint(ItemStackNBT.hasTag(a.getItemSold().getItem(), "ench"))
 					.build();
 			item.setAmount(a.getItemSold().getItem().getAmount());
 			item.setDurability(a.getItemSold().getItem().getDurability());

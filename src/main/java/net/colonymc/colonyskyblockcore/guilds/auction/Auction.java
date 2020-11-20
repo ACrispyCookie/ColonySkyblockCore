@@ -10,9 +10,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.itemstacks.Serializer;
-import net.colonymc.colonyspigotapi.itemstacks.SkullItemBuilder;
-import net.colonymc.colonyspigotapi.player.PlayerInventory;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
@@ -104,7 +104,7 @@ public class Auction {
 					+ " &d" + itemSold.getItem().getAmount() + "x " + itemSold.getName() + " &ffor &d" + Guild.balance(startingPrice));
 		NPCListener.sendRotatingHead(NPCListener.auctionMaster, ((Player) seller.getPlayer()), itemSold.getItem(), "&fYou just started an auction for &d" + Guild.balance(startingPrice), false, 0);
 		Database.sendStatement("INSERT INTO ActiveAuctions (id, seller, topBidder, startingPrice, currentPrice, timeEnds, item, sellerClaimed) VALUES "
-				+ "(" + id + ", '" + seller.getPlayer().getUniqueId().toString() + "', 'NONE', " + startingPrice + ", " + currentPrice + ", " + endsIn + ", '" + Serializer.serializeItemStack(itemSold.getItem()) + "', 0)");
+				+ "(" + id + ", '" + seller.getPlayer().getUniqueId().toString() + "', 'NONE', " + startingPrice + ", " + currentPrice + ", " + endsIn + ", '" + ItemStackSerializer.serializeItemStack(itemSold.getItem()) + "', 0)");
 	}
 	
 	public void endAuction() {

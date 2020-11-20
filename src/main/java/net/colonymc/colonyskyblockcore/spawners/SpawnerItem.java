@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.ItemStackBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
 public class SpawnerItem {

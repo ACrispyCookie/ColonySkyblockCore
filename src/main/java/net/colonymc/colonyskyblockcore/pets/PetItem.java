@@ -8,8 +8,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
-import net.colonymc.colonyspigotapi.itemstacks.SkullItemBuilder;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
 public class PetItem implements Listener {
@@ -51,14 +51,14 @@ public class PetItem implements Listener {
 	
 	public static boolean isPet(ItemStack item) {
 		if(item.hasItemMeta()) {
-			return NBTItems.hasTag(item, "skyblockPet");
+			return ItemStackNBT.hasTag(item, "skyblockPet");
 		}
 		return false;
 	}
 	
 	public static PetType whatType(ItemStack item) {
 		if(isPet(item)) {
-			return PetType.valueOf(NBTItems.getString(item, "skyblockPet"));
+			return PetType.valueOf(ItemStackNBT.getString(item, "skyblockPet"));
 		}
 		return null;
 	}

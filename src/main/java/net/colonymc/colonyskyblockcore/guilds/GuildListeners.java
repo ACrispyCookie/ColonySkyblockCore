@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import net.colonymc.colonyspigotapi.player.ScoreboardManager;
+import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -36,7 +36,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.colonymc.colonyspigotapi.messages.Message;
+import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -95,8 +95,8 @@ public class GuildListeners implements Listener {
 				}
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&d&m*-*&f&m-*-*-*-&d&m*-*-*-*-*-*-&f&m*-*-*&d&m-*-*-*-*-*-*&f&m-*-*-*-&d&m*-*"));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
-				new Message("&fWelcome, &6&l" + p.getName() + " &fto &d&lColony&f&lMC").addRecipient(p).centered(true).send();
-				new Message("&7&l&o{{ &7Skyblock Dimension  &7&l&o}}").addRecipient(p).centered(true).send();
+				new ChatMessage("&fWelcome, &6&l" + p.getName() + " &fto &d&lColony&f&lMC").addRecipient(p).centered(true).send();
+				new ChatMessage("&7&l&o{{ &7Skyblock Dimension  &7&l&o}}").addRecipient(p).centered(true).send();
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f(&d-&f)         &d&l* &f&lWEBSITE &dhttps://colonymc.net"));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f(&d-&f)         &d&l* &f&lSTORE   &dhttps://store.colonymc.net"));

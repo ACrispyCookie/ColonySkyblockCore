@@ -10,14 +10,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.Plugin;
 
-import net.colonymc.colonyspigotapi.messages.Message;
+import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
 
 public class PluginCommand implements CommandExecutor, Listener{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] args) {
 		if(!sender.hasPermission("*")) {
-			Message header = new Message("&5&lCustom Plugins").centered(true).addRecipient(sender);
+			ChatMessage header = new ChatMessage("&5&lCustom Plugins").centered(true).addRecipient(sender);
 			header.send();
 			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', " &5&l» &dColonySkyblockCore: &fEverything from the guild system to the aution house, the minions and the custom bosses is from this plugin. "
 					+ " It was coded by the owner of the server &d&lACrispyCookie&f."));
@@ -25,7 +25,7 @@ public class PluginCommand implements CommandExecutor, Listener{
 					+ " &fIt was also coded by the owner of the server &d&lACrispyCookie&f."));
 		}
 		else {
-			Message header = new Message("&a&lAll Plugins (" + Bukkit.getPluginManager().getPlugins().length + ")").centered(true).addRecipient(sender);
+			ChatMessage header = new ChatMessage("&a&lAll Plugins (" + Bukkit.getPluginManager().getPlugins().length + ")").centered(true).addRecipient(sender);
 			header.send();
 			StringBuilder message = new StringBuilder();
 			int i = 0;

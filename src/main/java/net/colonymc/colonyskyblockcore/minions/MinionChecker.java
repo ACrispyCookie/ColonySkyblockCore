@@ -6,12 +6,12 @@ import java.lang.reflect.InvocationTargetException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.NBTItems;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
 
 public class MinionChecker {
 	
 	public static boolean isMinion(ItemStack item) {
-		return item != null && item.hasItemMeta() && item.getType() != Material.AIR && NBTItems.hasTag(item, "minionType");
+		return item != null && item.hasItemMeta() && item.getType() != Material.AIR && ItemStackNBT.hasTag(item, "minionType");
 	}
 	
 	public static Minion getMinion(ItemStack i) {
@@ -27,14 +27,14 @@ public class MinionChecker {
 	
 	private static int getLevel(ItemStack i) {
 		if(isMinion(i)) {
-			return NBTItems.getInt(i, "minionLevel");
+			return ItemStackNBT.getInt(i, "minionLevel");
 		}
 		return -1;
 	}
 	
 	public static MaterialType whatType(ItemStack item) {
 		if(isMinion(item)) {
-				return typeFromEncodedName(NBTItems.getString(item, "minionType"));
+				return typeFromEncodedName(ItemStackNBT.getString(item, "minionType"));
 		}
 		return null;
 	}

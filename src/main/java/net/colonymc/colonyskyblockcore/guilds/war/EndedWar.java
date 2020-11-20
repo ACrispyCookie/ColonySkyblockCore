@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.itemstacks.Serializer;
+import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 
@@ -111,7 +111,7 @@ public class EndedWar {
 	public void removeItem(ItemStack i, Guild g) {
 		if(loot.get(g) != null) {
 			loot.get(g).remove(i);
-			Database.sendStatement("DELETE FROM WarItems WHERE warId=" + this.getWarId() + " AND guildId=" + g.getId() + " AND item='" + Serializer.serializeItemStack(i) + "';");
+			Database.sendStatement("DELETE FROM WarItems WHERE warId=" + this.getWarId() + " AND guildId=" + g.getId() + " AND item='" + ItemStackSerializer.serializeItemStack(i) + "';");
 		}
 	}
 	

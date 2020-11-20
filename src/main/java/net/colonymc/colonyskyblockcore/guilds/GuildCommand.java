@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import net.colonymc.colonyspigotapi.player.ScoreboardManager;
+import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import com.mysql.jdbc.StringUtils;
 
-import net.colonymc.colonyspigotapi.messages.Message;
+import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.MainMessages;
 import net.colonymc.colonyskyblockcore.guilds.inventories.GuildLootMenu;
@@ -201,7 +201,7 @@ public class GuildCommand implements CommandExecutor {
 	}
 
 	private void handleGuildHelp(Player p, String[] args, String label) {
-		Message header = new Message("&d&lGuild/Island Commands").centered(true).addRecipient(p);
+		ChatMessage header = new ChatMessage("&d&lGuild/Island Commands").centered(true).addRecipient(p);
 		String commands = ChatColor.translateAlternateColorCodes('&', " &5&l» &d/" + label + " help &f- Displays this menu."
 				+ "\n &5&l» &d/" + label + " create <name> &f- Creates a new guild with the specified name."
 				+ "\n &5&l» &d/" + label + " invite <name> &f- Invites a player to your current guild. "
@@ -353,7 +353,7 @@ public class GuildCommand implements CommandExecutor {
 	}
 	
 	private void handleGuildTop(Player p, String[] args) {
-		Message header = new Message("&d&lTop Guilds").centered(true).addRecipient(p);
+		ChatMessage header = new ChatMessage("&d&lTop Guilds").centered(true).addRecipient(p);
 		StringBuilder topGuilds = null;
 		for(int i = 0; i < Guild.getSortedTopGuild(15).size(); i++) {
 			Guild g = Guild.getSortedTopGuild(15).get(i);
@@ -423,7 +423,7 @@ public class GuildCommand implements CommandExecutor {
 
 	private void handleGuildList(Player p, String[] args) {
 		Guild g = Guild.getByPlayer(p);
-		Message header = new Message("&f{ &a" + g.getName() + " &f}").centered(true).addRecipient(p);
+		ChatMessage header = new ChatMessage("&f{ &a" + g.getName() + " &f}").centered(true).addRecipient(p);
 		ArrayList<GuildPlayer> allPlayers = new ArrayList<>(g.getMemberUuids().values());
 		allPlayers.sort(new GuildPlayerComparator());
 		ArrayList<OfflinePlayer> onlinePlayers = new ArrayList<>();
@@ -501,7 +501,7 @@ public class GuildCommand implements CommandExecutor {
 			Guild g = searchGuild(args[1]);
 			if(g != null) {
 				if(!g.equals(Guild.getByPlayer(p))) {
-					Message header = new Message("&f{ &d" + Guild.getByPlayer(p).getRelation(g).color + g.getName() + " &f}").centered(true).addRecipient(p);
+					ChatMessage header = new ChatMessage("&f{ &d" + Guild.getByPlayer(p).getRelation(g).color + g.getName() + " &f}").centered(true).addRecipient(p);
 					ArrayList<GuildPlayer> allPlayers = new ArrayList<>(g.getMemberUuids().values());
 					allPlayers.sort(new GuildPlayerComparator());
 					ArrayList<GuildPlayer> onlinePlayers = new ArrayList<>();

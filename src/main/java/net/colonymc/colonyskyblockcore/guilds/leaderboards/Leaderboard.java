@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Location;
 
-import net.colonymc.colonyspigotapi.player.PublicHologram;
+import net.colonymc.colonyspigotapi.api.holograms.PublicHologram;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.colonymc.colonyskyblockcore.guilds.war.EndedWar;
