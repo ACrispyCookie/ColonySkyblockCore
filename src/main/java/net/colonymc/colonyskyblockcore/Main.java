@@ -541,8 +541,8 @@ public class Main extends JavaPlugin{
 			ArrayList<String> tables = new ArrayList<>();
 			if(conn.equals(Main.getConnection())) {
 				tables.add("GuildInfo");
-				tables.add("PlayerKits");
 				tables.add("PlayerInfo");
+				tables.add("PlayerKits");
 				tables.add("PlayerCooldowns");
 				tables.add("IslandInfo");
 				tables.add("GuildTransactions");
@@ -562,6 +562,10 @@ public class Main extends JavaPlugin{
 			    ResultSet result = meta.getTables(null, null, s, new String[] {"TABLE"});
 			    if(!result.next()) {
 			    	switch(s) {
+					case "PlayerInfo":
+						PreparedStatement playerInfo = conn.prepareStatement("CREATE TABLE PlayerInfo (playerName varchar(255), playerUuid varchar(255) UNIQUE, silver double(255, 2), dwarfDust double(255, 2), guild int(255) DEFAULT '0', guildRank varchar(255), timeJoined bigint(255), messages bool);");
+						playerInfo.execute();
+						break;
 			    	case "GuildInfo":
 				    	PreparedStatement guildInfo = conn.prepareStatement("CREATE TABLE GuildInfo (id int(255), guildName varchar(255), guildLevel int(255), bankSilver double(255, 2), bankDwarfDust double(255, 2), open boolean, renamesRemaining int(255), islandCreated bool, PRIMARY KEY (id));");
 				    	guildInfo.execute();
@@ -569,10 +573,6 @@ public class Main extends JavaPlugin{
 			    	case "PlayerKits":
 				    	PreparedStatement playerKits = conn.prepareStatement("CREATE TABLE PlayerKits (playerUuid varchar(255), kit varchar(255), canBeClaimedAgainAt bigint(255), FOREIGN KEY (playerUuid) REFERENCES PlayerInfo(playerUuid));");
 				    	playerKits.execute();
-				    	break;
-			    	case "PlayerInfo":
-				    	PreparedStatement playerInfo = conn.prepareStatement("CREATE TABLE PlayerInfo (playerName varchar(255), playerUuid varchar(255) UNIQUE, silver double(255, 2), dwarfDust double(255, 2), guild int(255) DEFAULT '0', guildRank varchar(255), timeJoined bigint(255), messages bool);");
-				    	playerInfo.execute();
 				    	break;
 			    	case "PlayerCooldowns":
 				    	PreparedStatement cooldowns = conn.prepareStatement("CREATE TABLE PlayerCooldowns (playerUuid varchar(255), type varchar(255), shouldEnd bigint(255));");
