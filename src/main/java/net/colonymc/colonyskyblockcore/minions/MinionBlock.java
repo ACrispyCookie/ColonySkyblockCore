@@ -30,10 +30,10 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
-import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
-import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotlib.lib.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.primitive.RomanNumber;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;

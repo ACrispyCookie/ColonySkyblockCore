@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.Plugin;
 
-import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ChatMessage;
 
 public class PluginCommand implements CommandExecutor, Listener{
 

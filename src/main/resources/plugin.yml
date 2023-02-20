@@ -2,7 +2,7 @@ name: ColonySkyblockCore
 version: 1.0
 author: ACrispyCookie
 main: net.colonymc.colonyskyblockcore.Main
-depend: [ColonySpigotAPI, ColonyVikingCore, Vault, Citizens, PlaceholderAPI, ProtocolLib, NBTAPI, WorldEdit, WorldGuard]
+depend: [ColonySpigotLib, ColonyVikingCore, Vault, Citizens, PlaceholderAPI, ProtocolLib, NBTAPI, WorldEdit, WorldGuard]
 commands:
   shop:
     description: Base command for the shop.

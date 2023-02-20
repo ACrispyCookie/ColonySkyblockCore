@@ -17,9 +17,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.EulerAngle;
 
-import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
-import net.colonymc.colonyspigotapi.api.particles.Particle;
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotlib.lib.particles.Particle;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Main;
 
 public class Pet implements Listener {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import com.mysql.jdbc.StringUtils;
 
-import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ChatMessage;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.MainMessages;
 import net.colonymc.colonyskyblockcore.guilds.inventories.GuildLootMenu;

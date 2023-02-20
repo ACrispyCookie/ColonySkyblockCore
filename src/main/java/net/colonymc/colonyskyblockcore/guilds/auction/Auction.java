@@ -10,9 +10,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
-import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotlib.lib.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;

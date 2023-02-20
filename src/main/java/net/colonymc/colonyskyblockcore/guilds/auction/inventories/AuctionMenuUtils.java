@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackNBT;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.colonymc.colonyskyblockcore.guilds.Relation;
 import net.colonymc.colonyskyblockcore.guilds.auction.Auction;

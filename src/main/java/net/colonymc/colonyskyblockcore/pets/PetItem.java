@@ -8,8 +8,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
-import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotlib.lib.itemstack.SkullItemBuilder;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
 public class PetItem implements Listener {

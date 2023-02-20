@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.BorderColor;
 import net.colonymc.colonyskyblockcore.guilds.Guild;

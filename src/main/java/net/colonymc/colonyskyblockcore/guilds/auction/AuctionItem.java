@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.itemstack.MaterialName;
-import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
+import net.colonymc.colonyspigotlib.lib.itemstack.MaterialName;
+import net.colonymc.colonyspigotlib.lib.primitive.RomanNumber;
 
 public class AuctionItem {
 	

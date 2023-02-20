@@ -4,7 +4,7 @@ import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 import net.colonymc.colonyskyblockcore.guilds.auction.Auction;
 import net.colonymc.colonyskyblockcore.guilds.auction.Bidder;
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

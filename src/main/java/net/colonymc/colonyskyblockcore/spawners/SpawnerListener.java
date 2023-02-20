@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackNBT;
 
 public class SpawnerListener implements Listener {
 

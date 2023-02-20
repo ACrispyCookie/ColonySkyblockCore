@@ -2,10 +2,10 @@ package net.colonymc.colonyskyblockcore.shop;
 
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
-import net.colonymc.colonyspigotapi.api.itemstack.MaterialName;
-import net.colonymc.colonyspigotapi.api.primitive.Numbers;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.itemstack.MaterialName;
+import net.colonymc.colonyspigotlib.lib.primitive.Numbers;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

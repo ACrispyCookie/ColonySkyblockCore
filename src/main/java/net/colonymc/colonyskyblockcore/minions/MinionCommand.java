@@ -11,8 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
-import net.colonymc.colonyspigotapi.api.primitive.Numbers;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.primitive.Numbers;
 import net.colonymc.colonyskyblockcore.MainMessages;
 
 public class MinionCommand implements CommandExecutor,TabExecutor {

@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -20,8 +20,8 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
-import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotlib.lib.itemstack.SkullItemBuilder;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.guilds.auction.Auction;
 import net.colonymc.colonyskyblockcore.guilds.bank.BankTransaction;

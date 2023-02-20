@@ -34,8 +34,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackSerializer;
 import net.colonymc.colonyskyblockcore.crates.Crate;
 import net.colonymc.colonyskyblockcore.crates.CrateMenu;
 import net.colonymc.colonyskyblockcore.guilds.AdminGuildCommand;

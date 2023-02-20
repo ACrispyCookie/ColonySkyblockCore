@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ScoreboardManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -38,9 +38,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackSerializer;
-import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackSerializer;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ChatMessage;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.Guild;

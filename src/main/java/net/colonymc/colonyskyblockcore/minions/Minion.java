@@ -11,8 +11,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.itemstack.SkullItemBuilder;
-import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
+import net.colonymc.colonyspigotlib.lib.itemstack.SkullItemBuilder;
+import net.colonymc.colonyspigotlib.lib.primitive.RomanNumber;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 

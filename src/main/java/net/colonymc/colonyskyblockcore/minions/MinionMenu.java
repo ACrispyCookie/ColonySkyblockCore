@@ -20,9 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
-import net.colonymc.colonyspigotapi.api.primitive.RomanNumber;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.primitive.RomanNumber;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionMenuUtils;
 import net.colonymc.colonyskyblockcore.minions.fuel.Fuel;

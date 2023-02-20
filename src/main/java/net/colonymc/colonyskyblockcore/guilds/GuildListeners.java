@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import net.colonymc.colonyspigotapi.api.player.visuals.ScoreboardManager;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -36,7 +36,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.colonymc.colonyspigotapi.api.player.visuals.ChatMessage;
+import net.colonymc.colonyspigotlib.lib.player.visuals.ChatMessage;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.md_5.bungee.api.chat.ClickEvent;

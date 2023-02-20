@@ -19,7 +19,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
-import net.colonymc.colonyspigotapi.api.particles.Particle;
+import net.colonymc.colonyspigotlib.lib.particles.Particle;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.auction.inventories.AuctionHouseSelectMenu;
 import net.colonymc.colonyskyblockcore.guilds.bank.BankInventory;

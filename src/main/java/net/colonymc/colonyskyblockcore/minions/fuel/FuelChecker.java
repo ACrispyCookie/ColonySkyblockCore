@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackNBT;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 
 public class FuelChecker {

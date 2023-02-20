@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.colonymc.colonyskyblockcore.Main;
-import net.colonymc.colonyspigotapi.api.player.visuals.Title;
-import net.colonymc.colonyspigotapi.api.player.visuals.TitleAction;
+import net.colonymc.colonyspigotlib.lib.player.visuals.Title;
+import net.colonymc.colonyspigotlib.lib.player.visuals.TitleAction;
 import net.colonymc.colonyskyblockcore.guilds.Guild;
 
 public class Pouch {

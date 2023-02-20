@@ -2,7 +2,7 @@ package net.colonymc.colonyskyblockcore.guilds.inventories;
 
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.guilds.*;
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

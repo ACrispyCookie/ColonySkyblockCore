@@ -15,7 +15,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
 import net.colonymc.colonyskyblockcore.Main;
 
 public class ShopCategoriesMenu implements InventoryHolder, Listener {

@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.colonymc.colonyspigotapi.api.player.PlayerInventory;
+import net.colonymc.colonyspigotlib.lib.player.PlayerInventory;
 import net.colonymc.colonyskyblockcore.Database;
 import net.colonymc.colonyskyblockcore.Main;
 import net.colonymc.colonyskyblockcore.SkyblockPlayer;

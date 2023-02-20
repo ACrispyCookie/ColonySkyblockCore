@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackBuilder;
-import net.colonymc.colonyspigotapi.api.itemstack.ItemStackNBT;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackBuilder;
+import net.colonymc.colonyspigotlib.lib.itemstack.ItemStackNBT;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 import net.minecraft.server.v1_8_R3.NBTTagString;
 
